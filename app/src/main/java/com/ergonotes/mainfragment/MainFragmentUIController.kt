@@ -6,7 +6,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.GridLayoutManager
 import com.ergonotes.R
 import com.ergonotes.database.NoteDatabase
 import com.ergonotes.databinding.FragmentMainUIControllerBinding
@@ -29,9 +31,18 @@ class MainFragmentUIController : Fragment() {
             ViewModelProvider(
                 this, viewModelFactory).get(MainFragmentViewModel::class.java)
 
-        //binding.mainFragmentViewModel = mainFragmentViewModel
+        binding.mainFragmentViewModel = mainFragmentViewModel
 
         binding.lifecycleOwner = this
+
+
+//recyclerview
+        val manager = GridLayoutManager(activity, 3)
+        binding.recyclerViewTitles.layoutManager = manager
+
+        val adapter = MainFragmentAdapter()
+        binding.recyclerViewTitles.adapter = adapter
+
 
 //--------------------------------------------------------------------------------------------------
         return binding.root

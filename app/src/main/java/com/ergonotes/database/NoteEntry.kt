@@ -10,8 +10,8 @@ data class NoteEntry(
     @PrimaryKey(autoGenerate = true)
     var noteId: Long = 0L,
 
-    @ColumnInfo(name = "note_entry_name")
-    val noteEntryName: String = "",
+    @ColumnInfo(name = "note_entry_title")
+    val noteEntryTitle: String = "",
 
     @ColumnInfo(name = "note_entry_note")
     var noteEntryNote: String = "",
