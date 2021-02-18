@@ -10,6 +10,23 @@
         android:id="@+id/mainFragmentUIController"
         android:name="com.ergonotes.mainfragment.MainFragmentUIController"
         android:label="MainFragmentUIController"
-        tools:layout="@layout/fragment_main_u_i_controller" />
+        tools:layout="@layout/fragment_main">
+        <action
+            android:id="@+id/action_mainFragmentUIController_to_newFragmentUIController"
+            app:destination="@id/newFragmentUIController" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/newFragmentUIController"
+        android:name="com.ergonotes.newfragment.NewFragmentUIController"
+        android:label="NewFragmentUIController"
+        tools:layout="@layout/fragment_new">
+        <action
+            android:id="@+id/action_newFragmentUIController_to_mainFragmentUIController"
+            app:destination="@id/mainFragmentUIController" />
+        <argument
+            android:name="noteEntryKey"
+            app:argType="long" />
+    </fragment>
 
 </navigation>

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <data>
@@ -10,20 +11,38 @@
 
         <variable
             name="clickListener"
-            type="com.ergonotes.mainfragment.MainFragmentListener" />
+            type="com.ergonotes.mainfragment.NoteEntryListener" />
     </data>
 
-    <LinearLayout
+
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:onClick="@{() -> clickListener.onClick(note)}"
+        >
+
 
         <TextView
             android:id="@+id/title_string"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="#DC0909"
+            android:background="#59D61F"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/note_string"
             app:note_TitleString="@{note}" />
 
-    </LinearLayout>
+        <TextView
+            android:id="@+id/note_string"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:background="#03A9F4"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:note_NoteString="@{note}" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

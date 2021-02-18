@@ -10,8 +10,8 @@ class MainFragmentViewModelFactory(
     private val application: Application
 ) : ViewModelProvider.Factory {
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+        @Suppress("unchecked_cast")
         if (modelClass.isAssignableFrom(MainFragmentViewModel::class.java)) {
-
             return MainFragmentViewModel(dataSource, application) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")

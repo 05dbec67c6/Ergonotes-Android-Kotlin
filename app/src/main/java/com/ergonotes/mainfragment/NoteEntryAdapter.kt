@@ -8,13 +8,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.ergonotes.database.NoteEntry
 import com.ergonotes.databinding.ListItemTitleBinding
 
-class MainFragmentAdapter(val clickListener: MainFragmentListener) : ListAdapter<NoteEntry,
-        MainFragmentAdapter.ViewHolder>(NoteEntryDiffCallback()) {
+class NoteEntryAdapter(val clickListener: NoteEntryListener) : ListAdapter<NoteEntry,
+        NoteEntryAdapter.ViewHolder>(NoteEntryDiffCallback()) {
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val item = getItem(position)
-
-        holder.bind(clickListener, item)
+        holder.bind(getItem(position)!!, clickListener)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -24,7 +22,7 @@ class MainFragmentAdapter(val clickListener: MainFragmentListener) : ListAdapter
     class ViewHolder private constructor(val binding: ListItemTitleBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(clickListener: MainFragmentListener, item: NoteEntry) {
+        fun bind(item: NoteEntry, clickListener: NoteEntryListener) {
             binding.note = item
             binding.clickListener = clickListener
             binding.executePendingBindings()
@@ -34,7 +32,6 @@ class MainFragmentAdapter(val clickListener: MainFragmentListener) : ListAdapter
             fun from(parent: ViewGroup): ViewHolder {
                 val layoutInflater = LayoutInflater.from(parent.context)
                 val binding = ListItemTitleBinding.inflate(layoutInflater, parent, false)
-
                 return ViewHolder(binding)
             }
         }
@@ -51,6 +48,6 @@ class NoteEntryDiffCallback : DiffUtil.ItemCallback<NoteEntry>() {
     }
 }
 
-class MainFragmentListener(val clickListener: (noteId: Long) -> Unit) {
+class NoteEntryListener(val clickListener: (noteId: Long) -> Unit) {
     fun onClick(note: NoteEntry) = clickListener(note.noteId)
 }

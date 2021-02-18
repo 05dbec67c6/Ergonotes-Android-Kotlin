@@ -11,38 +11,67 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import com.ergonotes.R
 import com.ergonotes.database.NoteDatabase
-import com.ergonotes.databinding.FragmentMainUIControllerBinding
+import com.ergonotes.databinding.FragmentMainBinding
 
 class MainFragmentUIController : Fragment() {
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
 
-        val binding: FragmentMainUIControllerBinding = DataBindingUtil.inflate(
-                inflater, R.layout.fragment_main_u_i_controller, container, false)
+// -------------------------------------------------------------------------------------------------
+// Reference binding object and inflate fragment----------------------------------------------------
+
+        val binding: FragmentMainBinding = DataBindingUtil.inflate(
+            inflater, R.layout.fragment_main, container, false
+        )
 
         val application = requireNotNull(this.activity).application
 
-        val dataSource = NoteDatabase.getInstance(application).noteDatabaseDao
+// -------------------------------------------------------------------------------------------------
+// Setting up ViewModel and Factory-----------------------------------------------------------------
 
+        // Create an instance of the ViewModel Factory
+        val dataSource = NoteDatabase.getInstance(application).noteDatabaseDao
         val viewModelFactory = MainFragmentViewModelFactory(dataSource, application)
 
-        val mainFragmentViewModel =
-            ViewModelProvider(
-                this, viewModelFactory).get(MainFragmentViewModel::class.java)
+        // Associate ViewModel with this Fragment
+        val mainFragmentViewModel = ViewModelProvider(this, viewModelFactory)
+            .get(MainFragmentViewModel::class.java)
 
+        // Use View Model with data binding
         binding.mainFragmentViewModel = mainFragmentViewModel
 
-        binding.lifecycleOwner = this
+// -------------------------------------------------------------------------------------------------
+// Setting up Recyclerview in Gridlayout------------------------------------------------------------
 
-
-//recyclerview
         val manager = GridLayoutManager(activity, 3)
-        binding.recyclerViewTitles.layoutManager = manager
+        binding.recyclerViewItems.layoutManager = manager
 
-        val adapter = MainFragmentAdapter()
-        binding.recyclerViewTitles.adapter = adapter
+// -------------------------------------------------------------------------------------------------
+// Setting current activity as lifecycle owner of the binding for LiveData--------------------------
 
+        binding.setLifecycleOwner(this)
+
+// -------------------------------------------------------------------------------------------------
+// Instance of adapter that handles click on listitem and submit recyclerviews list-----------------
+
+        val adapter = NoteEntryAdapter(NoteEntryListener { nightId ->
+            mainFragmentViewModel.onNoteEntryClicked(nightId)
+        })
+
+        binding.recyclerViewItems.adapter = adapter
+
+// -----submiting the whole list for the recyclerview
+        mainFragmentViewModel.notes.observe(viewLifecycleOwner, Observer {
+            it?.let {
+                adapter.submitList(it)
+            }
+        })
+//--------------------------------------------------------------------------------------------------
+//--------------------------------------------------------------------------------------------------
+// Experimental here--------------------------------------------------------------------------------------------------
 
 //--------------------------------------------------------------------------------------------------
         return binding.root
