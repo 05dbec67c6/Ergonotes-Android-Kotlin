@@ -21,12 +21,13 @@
         android:name="com.ergonotes.newfragment.NewFragmentUIController"
         android:label="NewFragmentUIController"
         tools:layout="@layout/fragment_new">
-        <action
-            android:id="@+id/action_newFragmentUIController_to_mainFragmentUIController"
-            app:destination="@id/mainFragmentUIController" />
         <argument
             android:name="noteEntryKey"
             app:argType="long" />
+        <action
+            android:id="@+id/action_newFragmentUIController_to_mainFragmentUIController"
+            app:destination="@id/mainFragmentUIController" />
+
     </fragment>
 
 </navigation>

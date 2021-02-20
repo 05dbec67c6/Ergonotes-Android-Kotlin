@@ -9,56 +9,67 @@
         <variable
             name="newFragmentViewModel"
             type="com.ergonotes.newfragment.NewFragmentViewModel" />
+
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="#CFCFCF"
         tools:context=".newfragment.NewFragmentUIController">
 
         <Button
             android:id="@+id/button_to_main"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="67dp"
-            android:layout_marginBottom="151dp"
-            android:text="to main"
+            android:text="@string/button_to_main"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintEnd_toStartOf="@+id/button_apply"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/editText_note" />
 
         <Button
-            android:id="@+id/button2"
-            android:layout_width="wrap_content"
+            android:id="@+id/button_apply"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="56dp"
-            android:layout_marginBottom="34dp"
-            android:text="Button"
-            app:layout_constraintBottom_toBottomOf="@+id/button_to_main"
-            app:layout_constraintStart_toEndOf="@+id/button_to_main" />
+            android:text="@string/button_apply"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/button_to_main"
+            app:layout_constraintTop_toBottomOf="@+id/editText_note" />
 
         <EditText
-            android:id="@+id/editTextTextPersonName"
-            android:layout_width="wrap_content"
+            android:id="@+id/editText_title"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="86dp"
-            android:layout_marginTop="69dp"
-            android:ems="10"
+            android:autofillHints="@string/autoFillHint_title"
+            android:background="#C2C2C2"
+            android:hint="@string/hint_editText_title"
             android:inputType="textPersonName"
-            android:text="Title"
+            android:labelFor="@string/label_editText_title"
+            android:text="@{newFragmentViewModel.note.noteEntryTitle}"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@id/editText_note"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <EditText
-            android:id="@+id/editTextTextPersonName2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="80dp"
-            android:layout_marginTop="212dp"
-            android:ems="10"
-            android:inputType="textPersonName"
-            android:text="Note"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:id="@+id/editText_note"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:autofillHints="@string/autoFillHint_tote"
+            android:background="#AFAFAF"
+            android:gravity="top|start"
+            android:hint="@string/hint_editText_note"
+            android:inputType="textMultiLine"
+            android:labelFor="@string/label_editText_note"
+            android:text="@{newFragmentViewModel.note.noteEntryNote}"
+            app:layout_constraintBottom_toTopOf="@+id/button_apply"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/editText_title"
+            app:layout_constraintTop_toBottomOf="@+id/editText_title" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </layout>

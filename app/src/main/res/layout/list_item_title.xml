@@ -17,26 +17,15 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
+        android:layout_height="wrap_content"
         android:onClick="@{() -> clickListener.onClick(note)}"
-        >
+        android:orientation="vertical">
 
-
-        <TextView
-            android:id="@+id/title_string"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:background="#59D61F"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/note_string"
-            app:note_TitleString="@{note}" />
 
         <TextView
             android:id="@+id/note_string"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="100dp"
             android:background="#03A9F4"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

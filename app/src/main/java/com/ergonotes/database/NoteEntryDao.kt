@@ -22,8 +22,8 @@ interface NoteEntryDao {
     fun getAllNotes(): LiveData<List<NoteEntry>>
 
     @Query("SELECT * FROM note_entries_table ORDER BY noteId DESC LIMIT 1")
-    suspend fun getTonight(): NoteEntry?
+    suspend fun getNote(): NoteEntry?
 
     @Query("SELECT * from note_entries_table WHERE noteId = :key")
-    fun getNightWithId(key: Long): LiveData<NoteEntry>
+    fun getNoteWithId(key: Long): LiveData<NoteEntry>
 }

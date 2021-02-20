@@ -15,7 +15,7 @@ data class NoteEntry(
     var noteId: Long = 0L,
 
     @ColumnInfo(name = "note_entry_title")
-    val noteEntryTitle: String = "title_dummy",
+    var noteEntryTitle: String = "title_dummy",
 
     @ColumnInfo(name = "note_entry_note")
     var noteEntryNote: String = "note_dummy",

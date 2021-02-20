@@ -1,17 +1,29 @@
 package com.ergonotes.newfragment
 
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.ergonotes.database.NoteEntry
 import com.ergonotes.database.NoteEntryDao
-import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 
 class NewFragmentViewModel(
-    private val sleepNightKey: Long = 0L,
-    val database: NoteEntryDao
+    private val noteEntryKey: Long = 0L,
+    dataSource: NoteEntryDao
 ) : ViewModel() {
 
-    private val viewModelJob = Job()
+    val database = dataSource
 
-    private val _navigateToSleepTracker = MutableLiveData<Boolean?>()
+    private val note: LiveData<NoteEntry> = database.getNoteWithId(noteEntryKey)
+
+    fun getNote() = note
+
+    fun onSetNote(titleString: String, noteString: String) {
+        viewModelScope.launch {
+            val note = database.get(noteEntryKey)
+            note.noteEntryTitle = titleString
+            note.noteEntryNote = noteString
+            database.update(note)
+        }
+    }
 }

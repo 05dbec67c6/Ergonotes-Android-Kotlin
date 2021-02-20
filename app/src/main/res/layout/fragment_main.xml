@@ -14,15 +14,16 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        app:layout_constraintBottom_toBottomOf="@+id/recycler_view_items"
+        app:layout_constraintTop_toBottomOf="@+id/recycler_view_items"
         tools:context=".mainfragment.MainFragmentUIController">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycler_view_items"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_marginBottom="100dp"
             android:background="#E91E63"
-            app:layout_constraintBottom_toTopOf="@+id/editTextTextPersonName3"
+            app:layout_constraintBottom_toTopOf="@id/button_add"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
@@ -32,54 +33,31 @@
             android:id="@+id/button_to_new"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="11dp"
-            android:layout_marginBottom="92dp"
+            android:layout_marginBottom="76dp"
             android:text="To New"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.75"
-            app:layout_constraintStart_toEndOf="@+id/add_button"
+            app:layout_constraintStart_toEndOf="@+id/button_clear" />
+
+        <Button
+            android:id="@+id/button_add"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="76dp"
+            android:text="Add"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/button_clear"
             app:layout_constraintStart_toStartOf="parent" />
 
         <Button
-            android:id="@+id/add_button"
+            android:id="@+id/button_clear"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="12dp"
-            android:layout_marginBottom="96dp"
-            android:text="Add"
+            android:layout_marginBottom="76dp"
+            android:text="Clear"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/button_to_new"
-            app:layout_constraintHorizontal_bias="0.267"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/recycler_view_items"
-            app:layout_constraintVertical_bias="1.0" />
-
-        <EditText
-            android:id="@+id/editTextTextPersonName3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="3dp"
-            android:layout_marginBottom="5dp"
-            android:ems="10"
-            android:inputType="textPersonName"
-            android:text="Title"
-            app:layout_constraintBottom_toTopOf="@+id/editTextTextPersonName4"
-            app:layout_constraintEnd_toEndOf="@+id/editTextTextPersonName4"
-            app:layout_constraintTop_toBottomOf="@+id/recycler_view_items" />
-
-        <EditText
-            android:id="@+id/editTextTextPersonName4"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="10dp"
-            android:layout_marginBottom="169dp"
-            android:ems="10"
-            android:inputType="textPersonName"
-            android:text="Note"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="@+id/button_to_new"
-            app:layout_constraintTop_toBottomOf="@+id/editTextTextPersonName3" />
+            app:layout_constraintStart_toEndOf="@+id/button_add" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
