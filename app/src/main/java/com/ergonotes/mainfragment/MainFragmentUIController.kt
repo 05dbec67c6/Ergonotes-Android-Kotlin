@@ -13,6 +13,10 @@ import androidx.recyclerview.widget.GridLayoutManager
 import com.ergonotes.R
 import com.ergonotes.database.NoteDatabase
 import com.ergonotes.databinding.FragmentMainBinding
+import com.ergonotes.mainfragment.recyclerview.NoteEntryAdapterNotes
+import com.ergonotes.mainfragment.recyclerview.NoteEntryAdapterTitles
+import com.ergonotes.mainfragment.recyclerview.NoteEntryNotesListener
+import com.ergonotes.mainfragment.recyclerview.NoteEntryTitlesListener
 
 class MainFragmentUIController : Fragment() {
 
@@ -35,7 +39,7 @@ class MainFragmentUIController : Fragment() {
 
         // Create an instance of the ViewModel Factory
         val dataSource = NoteDatabase.getInstance(application).noteDatabaseDao
-        val viewModelFactory = MainFragmentViewModelFactory(dataSource, application)
+        val viewModelFactory = MainFragmentViewModelFactory(dataSource)
 
         // Associate ViewModel with this Fragment
         val mainFragmentViewModel = ViewModelProvider(this, viewModelFactory)
@@ -52,25 +56,41 @@ class MainFragmentUIController : Fragment() {
 // -------------------------------------------------------------------------------------------------
 // Setting up Recyclerview in Gridlayout------------------------------------------------------------
 
-        val manager = GridLayoutManager(activity, 3)
-        binding.recyclerViewItems.layoutManager = manager
+        val managerNotes = GridLayoutManager(activity, 3)
+        binding.recyclerViewNotes.layoutManager = managerNotes
+
+        val managerTitles = GridLayoutManager(activity, 3)
+        binding.recyclerViewTitles.layoutManager = managerTitles
 
 // -------------------------------------------------------------------------------------------------
-// Instance of adapter that handles click on listitem and submit recyclerviews list-----------------
+// Instance of adapter that handles click on listItem and submit recyclerviews list-----------------
 
-        val adapter = NoteEntryAdapter(NoteEntryListener { noteId ->
+        val adapterNotes = NoteEntryAdapterNotes(NoteEntryNotesListener { noteId ->
             mainFragmentViewModel.onNoteEntryClicked(noteId)
         })
 
-        binding.recyclerViewItems.adapter = adapter
+        binding.recyclerViewNotes.adapter = adapterNotes
 
         // Submitting the whole list for the recyclerview
         mainFragmentViewModel.notes.observe(viewLifecycleOwner, Observer {
             it?.let {
-                adapter.submitList(it)
+                adapterNotes.submitList(it)
             }
         })
 
+
+        val adapterTitles = NoteEntryAdapterTitles(NoteEntryTitlesListener { noteId ->
+            mainFragmentViewModel.onNoteEntryClicked(noteId)
+        })
+
+        binding.recyclerViewTitles.adapter = adapterTitles
+
+        // Submitting the whole list for the recyclerview
+        mainFragmentViewModel.notes.observe(viewLifecycleOwner, Observer {
+            it?.let {
+                adapterTitles.submitList(it)
+            }
+        })
 //--------------------------------------------------------------------------------------------------
 // Experimental here later for XML------------------------------------------------------------------
 
@@ -82,21 +102,15 @@ class MainFragmentUIController : Fragment() {
                 this.findNavController().navigate(
                     MainFragmentUIControllerDirections
                         .actionMainFragmentUIControllerToNewFragmentUIController(note)
-
-
                 )
             }
         })
 
 // -------------------------------------------------------------------------------------------------
-// Experimental here, later XML---------------------------------------------------------------------
-
-
-
+// New stuff here--------------------------------------------------------------------------------
 
 
 // -------------------------------------------------------------------------------------------------
-
         return binding.root
     }
 }

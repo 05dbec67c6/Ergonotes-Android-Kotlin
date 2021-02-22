@@ -10,10 +10,3 @@ fun TextView.setNoteTitleString(item: NoteEntry?) {
         text = item.noteEntryTitle
     }
 }
-
-@BindingAdapter("note_NoteString")
-fun TextView.setNoteNoteString(item: NoteEntry?) {
-    item?.let {
-        text = item.noteEntryNote
-    }
-}

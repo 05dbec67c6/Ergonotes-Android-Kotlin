@@ -1,6 +1,7 @@
 package com.ergonotes.newfragment
 
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ergonotes.database.NoteEntry
@@ -12,11 +13,34 @@ class NewFragmentViewModel(
     dataSource: NoteEntryDao
 ) : ViewModel() {
 
+// -------------------------------------------------------------------------------------------------
+// General variables----------------------------------------------------------------------------------------
+
     val database = dataSource
 
-    private val note: LiveData<NoteEntry> = database.getNoteWithId(noteEntryKey)
+    private val _note = MutableLiveData<NoteEntry?>()
+    val note: LiveData<NoteEntry?>
+        get() = _note
 
-    fun getNote() = note
+// -------------------------------------------------------------------------------------------------
+// Initialize---------------------------------------------------------------------------------------
+
+    init {
+        initializeNoteEntry()
+    }
+
+    private fun initializeNoteEntry() {
+        viewModelScope.launch {
+            _note.value = getNoteFromDatabase()
+        }
+    }
+
+    private suspend fun getNoteFromDatabase(): NoteEntry? {
+        return database.getNote()
+    }
+
+// -------------------------------------------------------------------------------------------------
+// Updating the database on buttonclick-------------------------------------------------------------
 
     fun onSetNote(titleString: String, noteString: String) {
         viewModelScope.launch {
@@ -27,3 +51,8 @@ class NewFragmentViewModel(
         }
     }
 }
+
+
+
+
+

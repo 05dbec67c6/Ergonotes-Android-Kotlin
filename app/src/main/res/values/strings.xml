@@ -2,19 +2,31 @@
 
     <string name="app_name">Ergonotes</string>
 
-<!--NewFragment -->
+    <!-- MainFragment___________________________________________________________________________ -->
+
+
+    <!-- NewFragment____________________________________________________________________________ -->
 
     <!-- Buttons -->
     <string name="button_to_main">Back</string>
     <string name="button_apply">Apply</string>
 
     <!-- EditTexts -->
+    <!-- Title -->
     <string name="hint_editText_title">Title</string>
     <string name="label_editText_title">The box for the title of the note</string>
     <string name="autoFillHint_title">Title</string>
 
+    <!-- Note -->
     <string name="hint_editText_note">Note</string>
     <string name="label_editText_note">The box for the content of the note</string>
-    <string name="autoFillHint_tote">Note</string>
+    <string name="autoFillHint_note">Note</string>
+
+    <!-- Toastmessages -->
+    <string name="toast_message_on_save">Note saved.</string>
+    <string name="toast_message_on_delete">Back without saving.</string>
+    <string name="smoker">smoker</string>
+    <!-- unsortiert -->
+
 
 </resources>

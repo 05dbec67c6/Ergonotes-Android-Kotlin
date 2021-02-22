@@ -1,6 +1,5 @@
 package com.ergonotes.mainfragment
 
-import android.app.Application
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -8,22 +7,30 @@ import com.ergonotes.database.NoteEntry
 import com.ergonotes.database.NoteEntryDao
 import kotlinx.coroutines.launch
 
-class MainFragmentViewModel(
-    dataSource: NoteEntryDao,
-    application: Application
-) : ViewModel() {
-
-    // Missing updatefunction
+class MainFragmentViewModel(dataSource: NoteEntryDao) :
+    ViewModel() {
 
 // -------------------------------------------------------------------------------------------------
 // General variables----------------------------------------------------------------------------------------
 
-    private var note = MutableLiveData<NoteEntry?>()
-
     val database = dataSource
+
+    private var note = MutableLiveData<NoteEntry?>()
 
     // For UIControllers Submit List
     val notes = database.getAllNotes()
+
+    fun getNote() = note
+
+    init {
+        initializeNoteEntry()
+    }
+    val doper: String = note.value?.noteEntryNote ?: "isnull"
+    private fun initializeNoteEntry() {
+        viewModelScope.launch {
+            note.value = getNoteFromDatabase()
+        }
+    }
 
 // -------------------------------------------------------------------------------------------------
 // Add new entry to database------------------------------------------------------------------------
@@ -58,6 +65,7 @@ class MainFragmentViewModel(
         database.clear()
     }
 
+
 // -------------------------------------------------------------------------------------------------
 // Click on NoteEntry-------------------------------------------------------------------------------
 
@@ -70,7 +78,9 @@ class MainFragmentViewModel(
         _navigateToNewFragment.value = id
     }
 
-
+/*    private suspend fun update(note: NoteEntry) {
+        database.update(note)
+    }*/
 }
 
 
@@ -87,16 +97,10 @@ val navigateToSleepQuality: LiveData<NoteEntry>
 fun doneShowingSnackbar() {
     _showSnackbarEvent.value = null
 }
-init {
-    initializeTonight()
-}
 
 
-private fun initializeTonight() {
-    viewModelScope.launch {
-        tonight.value = getTonightFromDatabase()
-    }
-}
+
+
 private suspend fun getTonightFromDatabase(): NoteEntry? {
     var night = database.getTonight()
     return night

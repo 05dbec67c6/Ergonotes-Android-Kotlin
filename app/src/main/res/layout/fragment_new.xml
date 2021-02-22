@@ -16,27 +16,10 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="#CFCFCF"
+        app:layout_constraintEnd_toEndOf="@+id/button_to_main"
+        app:layout_constraintStart_toEndOf="@+id/button_to_main"
         tools:context=".newfragment.NewFragmentUIController">
 
-        <Button
-            android:id="@+id/button_to_main"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="@string/button_to_main"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/button_apply"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/editText_note" />
-
-        <Button
-            android:id="@+id/button_apply"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:text="@string/button_apply"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/button_to_main"
-            app:layout_constraintTop_toBottomOf="@+id/editText_note" />
 
         <EditText
             android:id="@+id/editText_title"
@@ -58,17 +41,83 @@
             android:id="@+id/editText_note"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:autofillHints="@string/autoFillHint_tote"
+            android:autofillHints="@string/autoFillHint_note"
             android:background="#AFAFAF"
             android:gravity="top|start"
             android:hint="@string/hint_editText_note"
             android:inputType="textMultiLine"
             android:labelFor="@string/label_editText_note"
             android:text="@{newFragmentViewModel.note.noteEntryNote}"
-            app:layout_constraintBottom_toTopOf="@+id/button_apply"
+            app:layout_constraintBottom_toTopOf="@+id/toolbar"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="@+id/editText_title"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/editText_title" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/toolbar"
+            android:layout_width="0dp"
+            android:layout_height="50dp"
+            android:background="#000000"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/editText_note">
+
+            <ImageButton
+                android:id="@+id/button_back"
+                style="@style/Widget.AppCompat.ImageButton"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:background="#C0C0C0"
+                android:padding="20dp"
+                android:src="@drawable/ic_baseline_arrow_back_24"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/button_delete"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageButton
+                android:id="@+id/button_delete"
+                style="@style/Widget.AppCompat.ImageButton"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:background="#C26262"
+                android:padding="20dp"
+                android:src="@drawable/ic_baseline_delete_forever_24"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/button_toggle_focus"
+                app:layout_constraintStart_toEndOf="@id/button_back"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageButton
+                android:id="@+id/button_toggle_focus"
+                style="@style/Widget.AppCompat.ImageButton"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:background="#C0C0C0"
+                android:padding="20dp"
+                android:src="@drawable/ic_baseline_calendar_view_day_24"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/button_apply_and_go_to_main"
+                app:layout_constraintStart_toEndOf="@id/button_delete"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageButton
+                android:id="@+id/button_apply_and_go_to_main"
+                style="@style/Widget.AppCompat.ImageButton"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:background="#5EBD61"
+                android:padding="20dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/button_toggle_focus"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/ic_baseline_check_24" />
+
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

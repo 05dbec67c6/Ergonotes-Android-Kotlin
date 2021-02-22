@@ -11,7 +11,7 @@
 
         <variable
             name="clickListener"
-            type="com.ergonotes.mainfragment.recyclerview.NoteEntryTitlesListener" />
+            type="com.ergonotes.mainfragment.recyclerview.NoteEntryNotesListener" />
     </data>
 
 

@@ -10,7 +10,7 @@ abstract class NoteDatabase : RoomDatabase() {
 
     abstract val noteDatabaseDao: NoteEntryDao
 
-    // Has companion object, because no instance of the class is needed
+    // Companion object, because no instance of the class is needed
     companion object {
 
         //Volatile means, it will never get cached

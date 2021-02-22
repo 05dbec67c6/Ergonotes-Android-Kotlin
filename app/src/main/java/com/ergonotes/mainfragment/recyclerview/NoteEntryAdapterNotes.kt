@@ -1,4 +1,4 @@
-package com.ergonotes.mainfragment
+package com.ergonotes.mainfragment.recyclerview
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -6,10 +6,10 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.ergonotes.database.NoteEntry
-import com.ergonotes.databinding.ListItemTitleBinding
+import com.ergonotes.databinding.ListItemNoteBinding
 
-class NoteEntryAdapter(val clickListener: NoteEntryListener) : ListAdapter<NoteEntry,
-        NoteEntryAdapter.ViewHolder>(NoteEntryDiffCallback()) {
+class NoteEntryAdapterNotes(val clickListener: NoteEntryNotesListener) : ListAdapter<NoteEntry,
+        NoteEntryAdapterNotes.ViewHolder>(NoteEntryNotesDiffCallback()) {
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.bind(getItem(position)!!, clickListener)
@@ -19,10 +19,10 @@ class NoteEntryAdapter(val clickListener: NoteEntryListener) : ListAdapter<NoteE
         return ViewHolder.from(parent)
     }
 
-    class ViewHolder private constructor(val binding: ListItemTitleBinding) :
+    class ViewHolder private constructor(val binding: ListItemNoteBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(item: NoteEntry, clickListener: NoteEntryListener) {
+        fun bind(item: NoteEntry, clickListener: NoteEntryNotesListener) {
             binding.note = item
             binding.clickListener = clickListener
             binding.executePendingBindings()
@@ -31,14 +31,14 @@ class NoteEntryAdapter(val clickListener: NoteEntryListener) : ListAdapter<NoteE
         companion object {
             fun from(parent: ViewGroup): ViewHolder {
                 val layoutInflater = LayoutInflater.from(parent.context)
-                val binding = ListItemTitleBinding.inflate(layoutInflater, parent, false)
+                val binding = ListItemNoteBinding.inflate(layoutInflater, parent, false)
                 return ViewHolder(binding)
             }
         }
     }
 }
 
-class NoteEntryDiffCallback : DiffUtil.ItemCallback<NoteEntry>() {
+class NoteEntryNotesDiffCallback : DiffUtil.ItemCallback<NoteEntry>() {
     override fun areItemsTheSame(oldItem: NoteEntry, newItem: NoteEntry): Boolean {
         return oldItem.noteId == newItem.noteId
     }
@@ -48,6 +48,7 @@ class NoteEntryDiffCallback : DiffUtil.ItemCallback<NoteEntry>() {
     }
 }
 
-class NoteEntryListener(val clickListener: (noteId: Long) -> Unit) {
+class NoteEntryNotesListener(val clickListener: (noteId: Long) -> Unit) {
     fun onClick(note: NoteEntry) = clickListener(note.noteId)
 }
+

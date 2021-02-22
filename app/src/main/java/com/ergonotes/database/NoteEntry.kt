@@ -1,12 +1,8 @@
 package com.ergonotes.database
 
-import android.provider.ContactsContract
-import android.view.View
-import android.widget.Button
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.ergonotes.R
 
 @Entity(tableName = "note_entries_table")
 data class NoteEntry(
