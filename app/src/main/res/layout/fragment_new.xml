@@ -20,7 +20,6 @@
         app:layout_constraintStart_toEndOf="@+id/button_to_main"
         tools:context=".newfragment.NewFragmentUIController">
 
-
         <EditText
             android:id="@+id/editText_title"
             android:layout_width="0dp"
@@ -114,8 +113,6 @@
                 app:layout_constraintStart_toEndOf="@id/button_toggle_focus"
                 app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="@drawable/ic_baseline_check_24" />
-
-
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

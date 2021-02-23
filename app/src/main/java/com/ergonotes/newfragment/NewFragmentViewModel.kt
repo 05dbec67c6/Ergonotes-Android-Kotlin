@@ -1,7 +1,6 @@
 package com.ergonotes.newfragment
 
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ergonotes.database.NoteEntry
@@ -10,44 +9,24 @@ import kotlinx.coroutines.launch
 
 class NewFragmentViewModel(
     private val noteEntryKey: Long = 0L,
-    dataSource: NoteEntryDao
+    private val dataSource: NoteEntryDao
 ) : ViewModel() {
 
 // -------------------------------------------------------------------------------------------------
-// General variables----------------------------------------------------------------------------------------
+// Set and initialize-------------------------------------------------------------------------------
 
-    val database = dataSource
-
-    private val _note = MutableLiveData<NoteEntry?>()
-    val note: LiveData<NoteEntry?>
-        get() = _note
+    private val note: LiveData<NoteEntry> = dataSource.getNoteWithId(noteEntryKey)
+    fun getNote() = note
 
 // -------------------------------------------------------------------------------------------------
-// Initialize---------------------------------------------------------------------------------------
-
-    init {
-        initializeNoteEntry()
-    }
-
-    private fun initializeNoteEntry() {
-        viewModelScope.launch {
-            _note.value = getNoteFromDatabase()
-        }
-    }
-
-    private suspend fun getNoteFromDatabase(): NoteEntry? {
-        return database.getNote()
-    }
-
-// -------------------------------------------------------------------------------------------------
-// Updating the database on buttonclick-------------------------------------------------------------
+// Button update database --------------------------------------------------------------------------
 
     fun onSetNote(titleString: String, noteString: String) {
         viewModelScope.launch {
-            val note = database.get(noteEntryKey)
+            val note = dataSource.getTargetNote(noteEntryKey)
             note.noteEntryTitle = titleString
             note.noteEntryNote = noteString
-            database.update(note)
+            dataSource.updateNote(note)
         }
     }
 }

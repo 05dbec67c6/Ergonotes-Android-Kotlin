@@ -24,7 +24,7 @@ class NoteEntryAdapterTitles(val clickListener: NoteEntryTitlesListener) : ListA
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(item: NoteEntry, clickListener: NoteEntryTitlesListener) {
-            binding.note = item
+            binding.title = item
             binding.clickListener = clickListener
             binding.executePendingBindings()
         }

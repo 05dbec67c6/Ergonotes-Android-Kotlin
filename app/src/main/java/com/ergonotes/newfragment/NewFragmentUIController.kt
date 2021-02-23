@@ -1,6 +1,7 @@
 package com.ergonotes.newfragment
 
 import android.content.Context
+import android.content.pm.ActivityInfo
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -98,15 +99,11 @@ class NewFragmentUIController : Fragment() {
         binding.buttonApplyAndGoToMain.setOnClickListener {
 
             newFragmentViewModel.onSetNote(
-                binding.editTextTitle.text.toString(),
-                binding.editTextNote.text.toString()
+                titleString = binding.editTextTitle.text.toString(),
+                noteString = binding.editTextNote.text.toString()
             )
 
-            Toast.makeText(
-                context,
-                getString(R.string.toast_message_on_save),
-                Toast.LENGTH_SHORT
-            )
+            Toast.makeText(context, getString(R.string.toast_message_on_save), Toast.LENGTH_SHORT)
                 .show()
 
             view?.findNavController()?.navigate(
@@ -123,13 +120,30 @@ class NewFragmentUIController : Fragment() {
         return binding.root
     }
 
+
+    // -------------------------------------------------------------------------------------------------
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
+        //automatically show inputmethod
         val inputMethodManager = requireActivity()
             .getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         inputMethodManager.showSoftInput(view.findFocus(), InputMethodManager.SHOW_IMPLICIT)
 
         super.onViewCreated(view, savedInstanceState)
+    }
+
+    // -------------------------------------------------------------------------------------------------
+    override fun onResume() {
+        super.onResume()
+
+        //
+        activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
+    }
+
+    // -------------------------------------------------------------------------------------------------
+    override fun onPause() {
+        super.onPause()
+        activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_FULL_SENSOR;
     }
 }
 

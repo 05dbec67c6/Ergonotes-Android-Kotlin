@@ -56,55 +56,59 @@ class MainFragmentUIController : Fragment() {
 // -------------------------------------------------------------------------------------------------
 // Setting up Recyclerview in Gridlayout------------------------------------------------------------
 
-        val managerNotes = GridLayoutManager(activity, 3)
+        val managerNotes = GridLayoutManager(activity, mainFragmentViewModel.numberOfColumns)
         binding.recyclerViewNotes.layoutManager = managerNotes
 
-        val managerTitles = GridLayoutManager(activity, 3)
+        val managerTitles = GridLayoutManager(activity, mainFragmentViewModel.numberOfColumns)
         binding.recyclerViewTitles.layoutManager = managerTitles
 
 // -------------------------------------------------------------------------------------------------
 // Instance of adapter that handles click on listItem and submit recyclerviews list-----------------
 
+        // RecyclerView of Notes
         val adapterNotes = NoteEntryAdapterNotes(NoteEntryNotesListener { noteId ->
-            mainFragmentViewModel.onNoteEntryClicked(noteId)
+            mainFragmentViewModel.onNoteClicked(noteId)
         })
 
         binding.recyclerViewNotes.adapter = adapterNotes
 
-        // Submitting the whole list for the recyclerview
-        mainFragmentViewModel.notes.observe(viewLifecycleOwner, Observer {
+        // Submitting the whole list of notes for the recyclerview
+        mainFragmentViewModel.allNotes.observe(viewLifecycleOwner, Observer {
             it?.let {
                 adapterNotes.submitList(it)
             }
         })
 
-
+        // RecyclerView of Titles
         val adapterTitles = NoteEntryAdapterTitles(NoteEntryTitlesListener { noteId ->
-            mainFragmentViewModel.onNoteEntryClicked(noteId)
+            mainFragmentViewModel.onNoteClicked(noteId)
         })
 
         binding.recyclerViewTitles.adapter = adapterTitles
 
-        // Submitting the whole list for the recyclerview
-        mainFragmentViewModel.notes.observe(viewLifecycleOwner, Observer {
+        // Observe and submit the whole list of titles for the recyclerview
+        mainFragmentViewModel.allNotes.observe(viewLifecycleOwner, Observer {
             it?.let {
                 adapterTitles.submitList(it)
             }
         })
-//--------------------------------------------------------------------------------------------------
-// Experimental here later for XML------------------------------------------------------------------
 
-        binding.buttonAdd.setOnClickListener { mainFragmentViewModel.onAdd() }
-        binding.buttonClear.setOnClickListener { mainFragmentViewModel.onClear() }
-
-        mainFragmentViewModel.navigateToNewFragment.observe(viewLifecycleOwner, Observer { note ->
-            note?.let {
+        // On item click
+        mainFragmentViewModel.navigateToNewFragment.observe(viewLifecycleOwner, Observer {
+            note -> note?.let {
                 this.findNavController().navigate(
                     MainFragmentUIControllerDirections
                         .actionMainFragmentUIControllerToNewFragmentUIController(note)
                 )
-            }
+        }
         })
+
+//--------------------------------------------------------------------------------------------------
+// Experimental here later for XML------------------------------------------------------------------
+
+        // On click of an item
+
+
 
 // -------------------------------------------------------------------------------------------------
 // New stuff here--------------------------------------------------------------------------------

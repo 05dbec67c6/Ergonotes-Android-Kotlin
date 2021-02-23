@@ -22,59 +22,149 @@
             android:id="@+id/recycler_view_notes"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:background="#8BC34A"
+            android:background="@color/silver"
             app:layout_constraintBottom_toTopOf="@id/toolbar"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_weight="66">
+            app:layout_constraintVertical_weight="65">
 
         </androidx.recyclerview.widget.RecyclerView>
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/toolbar"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="45dp"
+            android:background="#000000"
             app:layout_constraintBottom_toTopOf="@id/recycler_view_titles"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/recycler_view_notes">
 
-            <Button
-                android:id="@+id/button_add"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Add"
+            <ImageButton
+                android:id="@+id/button_settings"
+                style="@style/Widget.AppCompat.ImageButton"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="#FFEB3B"
+                android:src="@drawable/ic_baseline_settings_24"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/button_clear"
-                app:layout_constraintHorizontal_weight="50"
+                app:layout_constraintEnd_toStartOf="@id/button_exit"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_weight="50" />
+                app:layout_constraintTop_toTopOf="parent" />
 
-            <Button
+            <ImageButton
+                android:id="@+id/button_exit"
+                style="@style/Widget.AppCompat.ImageButton"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="#FFEB3B"
+                android:src="@drawable/ic_baseline_add_to_home_screen_24"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/button_previous_page"
+                app:layout_constraintStart_toEndOf="@id/button_settings"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageButton
+                android:id="@+id/button_previous_page"
+                style="@style/Widget.AppCompat.ImageButton"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="#FFEB3B"
+                android:src="@drawable/ic_baseline_keyboard_arrow_left_24"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/textView_current_page"
+                app:layout_constraintStart_toEndOf="@id/button_exit"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/textView_current_page"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginBottom="1dp"
+                android:background="#FFEB3B"
+                android:gravity="center"
+                android:text="@string/current_page"
+                app:layout_constraintBottom_toTopOf="@id/textView_sum_pages"
+                app:layout_constraintEnd_toStartOf="@id/button_next_page"
+                app:layout_constraintStart_toEndOf="@+id/button_previous_page"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/textView_sum_pages"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginTop="1dp"
+                android:background="#FFFFFF"
+                android:gravity="center"
+                android:text="@string/sum_pages"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/button_next_page"
+                app:layout_constraintStart_toEndOf="@id/button_previous_page"
+                app:layout_constraintTop_toBottomOf="@id/textView_current_page" />
+
+            <ImageButton
+                android:id="@+id/button_next_page"
+                style="@style/Widget.AppCompat.ImageButton"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="#FFEB3B"
+                android:src="@drawable/ic_baseline_keyboard_arrow_right_24"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/button_add"
+                app:layout_constraintStart_toEndOf="@+id/textView_current_page"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageButton
+                android:id="@+id/button_add"
+                style="@style/Widget.AppCompat.ImageButton"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="#FFEB3B"
+                android:src="@drawable/ic_baseline_add_24"
+                android:onClick="@{() -> mainFragmentViewModel.onPressNewNote()}"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/button_searching"
+                app:layout_constraintStart_toEndOf="@id/button_next_page"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageButton
+                android:id="@+id/button_searching"
+                style="@style/Widget.AppCompat.ImageButton"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="#FFEB3B"
+                android:src="@drawable/ic_baseline_search_24"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/button_clear"
+                app:layout_constraintStart_toEndOf="@id/button_add"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageButton
                 android:id="@+id/button_clear"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Clear"
+                style="@style/Widget.AppCompat.ImageButton"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="#FFEB3B"
+                android:onClick="@{() -> mainFragmentViewModel.onPressClear()}"
+                android:src="@drawable/ic_baseline_delete_forever_24"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_weight="50"
-                app:layout_constraintStart_toEndOf="@+id/button_add"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_weight="50" />
+                app:layout_constraintStart_toEndOf="@id/button_searching"
+                app:layout_constraintTop_toTopOf="parent" />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycler_view_titles"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:background="#E91E63"
+            android:background="@color/silver"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/toolbar"
-            app:layout_constraintVertical_weight="33" />
+            app:layout_constraintVertical_weight="35" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
