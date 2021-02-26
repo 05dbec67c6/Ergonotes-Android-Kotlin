@@ -1,10 +1,7 @@
 package com.ergonotes.database
 
 import androidx.lifecycle.LiveData
-import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.Query
-import androidx.room.Update
+import androidx.room.*
 
 @Dao
 interface NoteEntryDao {
@@ -15,8 +12,11 @@ interface NoteEntryDao {
     @Update
     suspend fun updateNote(note: NoteEntry)
 
-    @Query("DELETE FROM note_entries_table")
-    suspend fun clearDatabase()
+    @Delete
+    suspend fun deleteTargetNote(note: NoteEntry)
+
+//    @Query("DELETE FROM note_entries_table")
+//    suspend fun clearDatabase()
 
     @Query("SELECT * FROM note_entries_table ORDER BY noteId DESC")
     fun getAllNotes(): LiveData<List<NoteEntry>>
@@ -29,6 +29,7 @@ interface NoteEntryDao {
 
     @Query("SELECT * from note_entries_table WHERE noteId = :key")
     fun getNoteWithId(key: Long): LiveData<NoteEntry>
+
 }
 
 

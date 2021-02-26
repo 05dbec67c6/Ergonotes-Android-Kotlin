@@ -38,7 +38,7 @@ class MainFragmentUIController : Fragment() {
 // Setting up ViewModel and Factory-----------------------------------------------------------------
 
         // Create an instance of the ViewModel Factory
-        val dataSource = NoteDatabase.getInstance(application).noteDatabaseDao
+        val dataSource = NoteDatabase.getDatabase(application).noteDatabaseDao
         val viewModelFactory = MainFragmentViewModelFactory(dataSource)
 
         // Associate ViewModel with this Fragment
@@ -94,22 +94,19 @@ class MainFragmentUIController : Fragment() {
         })
 
         // On item click
-        mainFragmentViewModel.navigateToNewFragment.observe(viewLifecycleOwner, Observer {
-            note -> note?.let {
+        mainFragmentViewModel.navigateToNewFragment.observe(viewLifecycleOwner, Observer { note ->
+            note?.let {
                 this.findNavController().navigate(
                     MainFragmentUIControllerDirections
                         .actionMainFragmentUIControllerToNewFragmentUIController(note)
                 )
-        }
+            }
         })
 
-//--------------------------------------------------------------------------------------------------
-// Experimental here later for XML------------------------------------------------------------------
-
-        // On click of an item
-
-
-
+        // Button - Exit app
+        binding.buttonExit.setOnClickListener {
+            activity?.finish()
+        }
 // -------------------------------------------------------------------------------------------------
 // New stuff here--------------------------------------------------------------------------------
 

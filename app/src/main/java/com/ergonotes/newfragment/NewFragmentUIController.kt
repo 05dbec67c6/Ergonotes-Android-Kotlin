@@ -1,12 +1,10 @@
 package com.ergonotes.newfragment
 
-import android.content.Context
 import android.content.pm.ActivityInfo
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -22,17 +20,11 @@ import com.ergonotes.databinding.FragmentNewBinding
 
 class NewFragmentUIController : Fragment() {
 
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-
-// -------------------------------------------------------------------------------------------------
-// Reference binding object and inflate fragment with arguments-------------------------------------
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
+                              savedInstanceState: Bundle?): View? {
 
         val binding: FragmentNewBinding = DataBindingUtil.inflate(
-            inflater, R.layout.fragment_new, container, false
-        )
+            inflater, R.layout.fragment_new, container, false)
 
         val application = requireNotNull(this.activity).application
 
@@ -43,7 +35,7 @@ class NewFragmentUIController : Fragment() {
 // Setting up ViewModel and Factory-----------------------------------------------------------------
 
         // Create an instance of the ViewModel Factory
-        val dataSource = NoteDatabase.getInstance(application).noteDatabaseDao
+        val dataSource = NoteDatabase.getDatabase(application).noteDatabaseDao
         val viewModelFactory = NewFragmentViewModelFactory(arguments.noteEntryKey, dataSource)
 
         // Associate ViewModel with this Fragment
@@ -67,30 +59,57 @@ class NewFragmentUIController : Fragment() {
                 NewFragmentUIControllerDirections
                     .actionNewFragmentUIControllerToMainFragmentUIController()
             )
-
-            Toast.makeText(
-                context, getString(R.string.toast_message_on_delete),
-                Toast.LENGTH_SHORT
-            ).show()
         }
 
-        // Button - Delete Text
+        // Button - Delete editText and/or whole note
         binding.buttonDelete.setOnClickListener {
             when {
-                (binding.editTextTitle.hasFocus() && binding.editTextTitle.text.toString() != "")
+                binding.editTextTitle.hasFocus() && binding.editTextTitle.text.toString() != ""
                 -> binding.editTextTitle.setText("")
 
-                binding.editTextNote.hasFocus() &&
-                        binding.editTextNote.text.toString() != "" ->
-                    binding.editTextNote.setText("")
+                binding.editTextNote.hasFocus() && binding.editTextNote.text.toString() != ""
+                -> binding.editTextNote.setText("")
+
+                binding.editTextTitle.hasFocus() && binding.editTextTitle.text.toString() == ""
+                -> {newFragmentViewModel.deleteTargetNote()
+
+                    Toast.makeText(
+                        context, getString(R.string.toast_message_on_delete), Toast.LENGTH_SHORT
+                    ).show()
+
+                    view?.findNavController()?.navigate(
+                        NewFragmentUIControllerDirections
+                            .actionNewFragmentUIControllerToMainFragmentUIController()
+                    )
+                }
+
+                binding.editTextNote.hasFocus() && binding.editTextNote.text.toString() == ""
+                -> {
+                    newFragmentViewModel.deleteTargetNote()
+
+                    Toast.makeText(
+                        context, getString(R.string.toast_message_on_delete), Toast.LENGTH_SHORT
+                    ).show()
+
+                    view?.findNavController()?.navigate(
+                        NewFragmentUIControllerDirections
+                            .actionNewFragmentUIControllerToMainFragmentUIController()
+                    )
+                }
             }
         }
 
         // Button - Toggle focus between title and note
         binding.buttonToggleFocus.setOnClickListener {
             when {
-                binding.editTextTitle.hasFocus() -> binding.editTextNote.requestFocus()
-                binding.editTextNote.hasFocus() -> binding.editTextTitle.requestFocus()
+                binding.editTextTitle.hasFocus() -> {
+                    binding.editTextNote.requestFocus()
+                    binding.editTextNote.setSelection(binding.editTextNote.length())
+                }
+                binding.editTextNote.hasFocus() -> {
+                    binding.editTextTitle.requestFocus()
+                    binding.editTextTitle.setSelection(binding.editTextTitle.length())
+                }
                 else -> binding.editTextNote.requestFocus()
             }
         }
@@ -103,9 +122,6 @@ class NewFragmentUIController : Fragment() {
                 noteString = binding.editTextNote.text.toString()
             )
 
-            Toast.makeText(context, getString(R.string.toast_message_on_save), Toast.LENGTH_SHORT)
-                .show()
-
             view?.findNavController()?.navigate(
                 NewFragmentUIControllerDirections
                     .actionNewFragmentUIControllerToMainFragmentUIController()
@@ -113,30 +129,30 @@ class NewFragmentUIController : Fragment() {
         }
 
 // -------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------
 // Experimental here, later XML---------------------------------------------------------------------
 
+        binding.editTextNote.requestFocus()
 
-// -------------------------------------------------------------------------------------------------
+
+        binding.buttonShowDialog.setOnClickListener() {
+
+            //automatically show inputmethod
+//        val inputMethodManager = requireActivity()
+//            .getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+//        inputMethodManager.showSoftInput(view.findFocus(), InputMethodManager.SHOW_IMPLICIT)
+//
+//        super.onViewCreated(view, savedInstanceState)
+
+        }
         return binding.root
     }
 
 
     // -------------------------------------------------------------------------------------------------
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-
-        //automatically show inputmethod
-        val inputMethodManager = requireActivity()
-            .getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-        inputMethodManager.showSoftInput(view.findFocus(), InputMethodManager.SHOW_IMPLICIT)
-
-        super.onViewCreated(view, savedInstanceState)
-    }
-
-    // -------------------------------------------------------------------------------------------------
     override fun onResume() {
         super.onResume()
-
-        //
         activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
     }
 
@@ -146,4 +162,5 @@ class NewFragmentUIController : Fragment() {
         activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_FULL_SENSOR;
     }
 }
+
 

@@ -19,7 +19,7 @@ class NoteEntryAdapterNotes(val clickListener: NoteEntryNotesListener) : ListAda
         return ViewHolder.from(parent)
     }
 
-    class ViewHolder private constructor(val binding: ListItemNoteBinding) :
+    class ViewHolder private constructor(private val binding: ListItemNoteBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(item: NoteEntry, clickListener: NoteEntryNotesListener) {

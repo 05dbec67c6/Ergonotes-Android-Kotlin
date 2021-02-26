@@ -18,7 +18,7 @@ abstract class NoteDatabase : RoomDatabase() {
         private var INSTANCE: NoteDatabase? = null
 
         // returns reference to the database
-        fun getInstance(context: Context): NoteDatabase {
+        fun getDatabase(context: Context): NoteDatabase {
 
             // only one thread can enter the code at a time
             synchronized(this) {

@@ -28,7 +28,8 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:note_NoteString="@{note}" />
+            app:note_entry="@{note}" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
+
 </layout>

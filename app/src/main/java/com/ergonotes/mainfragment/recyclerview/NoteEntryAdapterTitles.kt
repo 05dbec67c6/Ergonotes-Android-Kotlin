@@ -20,7 +20,7 @@ class NoteEntryAdapterTitles(val clickListener: NoteEntryTitlesListener) : ListA
         return ViewHolder.from(parent)
     }
 
-    class ViewHolder private constructor(val binding: ListItemTitleBinding) :
+    class ViewHolder private constructor(private val binding: ListItemTitleBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(item: NoteEntry, clickListener: NoteEntryTitlesListener) {

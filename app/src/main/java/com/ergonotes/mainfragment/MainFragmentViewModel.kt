@@ -56,21 +56,6 @@ class MainFragmentViewModel(
     }
 
 // -------------------------------------------------------------------------------------------------
-// Button clear all notes---------------------------------------------------------------------------
-
-    // DAO-Function - Clear the whole database
-    private suspend fun clear() {
-        dataSource.clearDatabase()
-    }
-
-    // Clearing the list
-    fun onPressClear() {
-        viewModelScope.launch {
-            clear()
-        }
-    }
-
-// -------------------------------------------------------------------------------------------------
 // RecyclerView - Submitting the whole list of notes -----------------------------------------------
 
     // DAO - Variable - Get a list of all the notes

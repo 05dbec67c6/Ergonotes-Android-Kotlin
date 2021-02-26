@@ -19,7 +19,7 @@ class NewFragmentViewModel(
     fun getNote() = note
 
 // -------------------------------------------------------------------------------------------------
-// Button update database --------------------------------------------------------------------------
+// Button apply update database --------------------------------------------------------------------
 
     fun onSetNote(titleString: String, noteString: String) {
         viewModelScope.launch {
@@ -29,9 +29,19 @@ class NewFragmentViewModel(
             dataSource.updateNote(note)
         }
     }
+
+    // -------------------------------------------------------------------------------------------------
+// Button update database --------------------------------------------------------------------------
+    private suspend fun deleteTargetNote(note: NoteEntry) {
+        dataSource.deleteTargetNote(note)
+    }
+
+    fun deleteTargetNote() {
+        viewModelScope.launch {
+            val note = dataSource.getTargetNote(noteEntryKey)
+            deleteTargetNote(note)
+        }
+    }
 }
-
-
-
 
 
