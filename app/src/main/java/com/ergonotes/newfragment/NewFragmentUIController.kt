@@ -8,23 +8,25 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import com.ergonotes.R
 import com.ergonotes.database.NoteDatabase
 import com.ergonotes.databinding.FragmentNewBinding
-
-//Todo: SaveState on landscape mode
-//Todo: If title is empty, focus it, else, focus note
-//Todo: If editText is focused, put cursor at end of line
+import com.ergonotes.mainfragment.MainFragmentUIControllerDirections
 
 class NewFragmentUIController : Fragment() {
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
 
         val binding: FragmentNewBinding = DataBindingUtil.inflate(
-            inflater, R.layout.fragment_new, container, false)
+            inflater, R.layout.fragment_new, container, false
+        )
 
         val application = requireNotNull(this.activity).application
 
@@ -135,9 +137,13 @@ class NewFragmentUIController : Fragment() {
 
         binding.editTextNote.requestFocus()
 
+        binding.buttonShowDialog.setOnClickListener{
 
-        binding.buttonShowDialog.setOnClickListener() {
-
+        findNavController().navigate(
+                    NewFragmentUIControllerDirections
+                        .actionNewFragmentUIControllerToFireMissilesDialogFragment(arguments.noteEntryKey)
+                )
+            }
             //automatically show inputmethod
 //        val inputMethodManager = requireActivity()
 //            .getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
@@ -145,7 +151,7 @@ class NewFragmentUIController : Fragment() {
 //
 //        super.onViewCreated(view, savedInstanceState)
 
-        }
+
         return binding.root
     }
 

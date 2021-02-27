@@ -1,14 +1,13 @@
-package com.ergonotes.newfragment
+package com.ergonotes.dialogfragment
 
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ergonotes.database.NoteEntry
 import com.ergonotes.database.NoteEntryDao
 import kotlinx.coroutines.launch
 
-class NewFragmentViewModel(
+class DialogFragmentViewModel(
     private val noteEntryKey: Long = 0L,
     private val dataSource: NoteEntryDao
 ) : ViewModel() {
@@ -42,14 +41,6 @@ class NewFragmentViewModel(
             val note = dataSource.getTargetNote(noteEntryKey)
             deleteTargetNote(note)
         }
-    }
-
-    private val _navigateToNewFragment = MutableLiveData<Long>()
-    val navigateToNewFragment
-        get() = _navigateToNewFragment
-
-    fun onNoteClicked(id: Long) {
-        _navigateToNewFragment.value = id
     }
 }
 

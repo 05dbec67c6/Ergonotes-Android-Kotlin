@@ -29,7 +29,25 @@
         <action
             android:id="@+id/action_newFragmentUIController_to_mainFragmentUIController"
             app:destination="@id/mainFragmentUIController" />
+        <action
+            android:id="@+id/action_newFragmentUIController_to_fireMissilesDialogFragment"
+            app:destination="@id/fireMissilesDialogFragment" />
 
+    </fragment>
+    <fragment
+        android:id="@+id/fireMissilesDialogFragment"
+        android:name="com.ergonotes.dialogfragment.DialogFragmentUIController"
+        android:label="FireMissilesDialogFragment"
+        tools:layout="@layout/fragment_dialog">
+        <action
+            android:id="@+id/action_fireMissilesDialogFragment_to_mainFragmentUIController"
+            app:destination="@id/mainFragmentUIController" />
+        <argument
+            android:name="noteEntryKey"
+            app:argType="long" />
+        <action
+            android:id="@+id/action_fireMissilesDialogFragment_to_newFragmentUIController"
+            app:destination="@id/newFragmentUIController" />
     </fragment>
 
 </navigation>
