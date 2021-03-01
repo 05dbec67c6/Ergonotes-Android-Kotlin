@@ -38,14 +38,14 @@ class DialogFragmentUIController : Fragment() {
         binding.lifecycleOwner = this
 
 
-        binding.button.setOnClickListener {
+        binding.buttonDeleteDialog.setOnClickListener {
             dialogFragmentViewModel.deleteTargetNote()
 
             findNavController().navigate(DialogFragmentUIControllerDirections
                 .actionFireMissilesDialogFragmentToMainFragmentUIController())
 
         }
-        binding.button2.setOnClickListener {
+        binding.buttonCancelDialog.setOnClickListener {
 
             findNavController().navigate(DialogFragmentUIControllerDirections
                     .actionFireMissilesDialogFragmentToNewFragmentUIController(arguments.noteEntryKey)

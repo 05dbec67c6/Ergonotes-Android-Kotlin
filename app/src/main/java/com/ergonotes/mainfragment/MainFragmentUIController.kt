@@ -107,6 +107,18 @@ class MainFragmentUIController : Fragment() {
         binding.buttonExit.setOnClickListener {
             activity?.finish()
         }
+
+        // Button New
+        binding.buttonAdd.setOnClickListener {
+
+            mainFragmentViewModel.onPressNewNote()
+
+        }
+//            mainFragmentViewModel.onPressNewNote()
+        binding.buttonSearching.setOnClickListener {
+            mainFragmentViewModel.onClear()
+        }
+
 // -------------------------------------------------------------------------------------------------
 // New stuff here--------------------------------------------------------------------------------
 

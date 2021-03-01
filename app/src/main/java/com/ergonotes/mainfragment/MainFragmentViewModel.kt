@@ -5,13 +5,14 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.ergonotes.database.NoteEntry
 import com.ergonotes.database.NoteEntryDao
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class MainFragmentViewModel(
     private val dataSource: NoteEntryDao
 ) :
     ViewModel() {
-
 
     // Variable of the noteKeys in DAO for navigating
     private val _navigateToNewFragment = MutableLiveData<Long>()
@@ -23,12 +24,11 @@ class MainFragmentViewModel(
         _navigateToNewFragment.value = id
     }
 
-
 // -------------------------------------------------------------------------------------------------
 // General Variables--------------------------------------------------------------------------------
 
     // Set notes as liveData
-    private val notes = MutableLiveData<NoteEntry?>()
+    private var newestNote = MutableLiveData<NoteEntry>()
 
     // Number of columns of recyclerview
     val numberOfColumns: Int = 3
@@ -42,7 +42,7 @@ class MainFragmentViewModel(
     }
 
     // Create new note
-    fun onPressNewNote() {
+    fun onPressNewNote() : Long? {
         viewModelScope.launch {
 
             // Variable of databases entity
@@ -50,11 +50,24 @@ class MainFragmentViewModel(
 
             insertNewNote(newNote)
 
+
             // Set the values of the NoteEntry entity
-            notes.value = getLatestNoteFromDatabase()
+            //newestNote.value = getLatestNoteFromDatabase()
         }
+        return newestNote.value?.noteId
     }
 
+    fun onClear() {
+        viewModelScope.launch {
+            // Clear the database table.
+            clear()
+        }
+    }
+    private suspend fun clear() {
+        withContext(Dispatchers.IO) {
+            dataSource.clearDatabase()
+        }
+    }
 // -------------------------------------------------------------------------------------------------
 // RecyclerView - Submitting the whole list of notes -----------------------------------------------
 
@@ -69,19 +82,15 @@ class MainFragmentViewModel(
         return dataSource.getLatestNoteFromDatabase()
     }
 
-    init {
-        initializeNotes()
-    }
-
     private fun initializeNotes() {
         viewModelScope.launch {
-            notes.value = getLatestNoteFromDatabase()
+            newestNote.value = getLatestNoteFromDatabase()
         }
     }
 
-// -------------------------------------------------------------------------------------------------
-// LiveDataKeys for Navigating----------------------------------------------------------------------
-
+    init {
+        initializeNotes()
+    }
 
 }
 

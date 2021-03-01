@@ -19,6 +19,26 @@ class NewFragmentViewModel(
     private val note: LiveData<NoteEntry> = dataSource.getNoteWithId(noteEntryKey)
     fun getNote() = note
 
+    private var newestNote = MutableLiveData<NoteEntry?>()
+    private suspend fun insertNewNote(note: NoteEntry) {
+        dataSource.insertNewNote(note)
+    }
+    private suspend fun getLatestNoteFromDatabase(): NoteEntry? {
+        return dataSource.getLatestNoteFromDatabase()
+    }
+    fun onPressNewNote() {
+        viewModelScope.launch {
+
+            // Variable of databases entity
+            val newNote = NoteEntry()
+
+            insertNewNote(newNote)
+
+            // Set the values of the NoteEntry entity
+            newestNote.value = getLatestNoteFromDatabase()
+        }
+    }
+
 // -------------------------------------------------------------------------------------------------
 // Button apply update database --------------------------------------------------------------------
 

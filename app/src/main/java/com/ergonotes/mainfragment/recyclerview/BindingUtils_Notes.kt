@@ -10,3 +10,5 @@ fun TextView.setNoteNoteString(item: NoteEntry?) {
         text = item.noteEntryNote
     }
 }
+
+//text = item.noteEntryNote

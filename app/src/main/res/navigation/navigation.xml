@@ -44,7 +44,8 @@
             app:destination="@id/mainFragmentUIController" />
         <argument
             android:name="noteEntryKey"
-            app:argType="long" />
+            app:argType="long"
+            android:defaultValue="-1L" />
         <action
             android:id="@+id/action_fireMissilesDialogFragment_to_newFragmentUIController"
             app:destination="@id/newFragmentUIController" />

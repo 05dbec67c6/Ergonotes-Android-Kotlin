@@ -5,19 +5,18 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import com.ergonotes.R
 import com.ergonotes.database.NoteDatabase
 import com.ergonotes.databinding.FragmentNewBinding
-import com.ergonotes.mainfragment.MainFragmentUIControllerDirections
 
 class NewFragmentUIController : Fragment() {
+
+    private lateinit var newFragmentViewModel: NewFragmentViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -73,29 +72,19 @@ class NewFragmentUIController : Fragment() {
                 -> binding.editTextNote.setText("")
 
                 binding.editTextTitle.hasFocus() && binding.editTextTitle.text.toString() == ""
-                -> {newFragmentViewModel.deleteTargetNote()
-
-                    Toast.makeText(
-                        context, getString(R.string.toast_message_on_delete), Toast.LENGTH_SHORT
-                    ).show()
-
-                    view?.findNavController()?.navigate(
+                -> {
+                    findNavController().navigate(
                         NewFragmentUIControllerDirections
-                            .actionNewFragmentUIControllerToMainFragmentUIController()
+                            .actionNewFragmentUIControllerToFireMissilesDialogFragment(arguments.noteEntryKey)
                     )
                 }
 
                 binding.editTextNote.hasFocus() && binding.editTextNote.text.toString() == ""
                 -> {
-                    newFragmentViewModel.deleteTargetNote()
-
-                    Toast.makeText(
-                        context, getString(R.string.toast_message_on_delete), Toast.LENGTH_SHORT
-                    ).show()
-
-                    view?.findNavController()?.navigate(
+                    findNavController().navigate(
                         NewFragmentUIControllerDirections
-                            .actionNewFragmentUIControllerToMainFragmentUIController()
+                            .actionNewFragmentUIControllerToFireMissilesDialogFragment(arguments.noteEntryKey)
+
                     )
                 }
             }
@@ -135,16 +124,9 @@ class NewFragmentUIController : Fragment() {
 // -------------------------------------------------------------------------------------------------
 // Experimental here, later XML---------------------------------------------------------------------
 
-        binding.editTextNote.requestFocus()
 
-        binding.buttonShowDialog.setOnClickListener{
 
-        findNavController().navigate(
-                    NewFragmentUIControllerDirections
-                        .actionNewFragmentUIControllerToFireMissilesDialogFragment(arguments.noteEntryKey)
-                )
-            }
-            //automatically show inputmethod
+        //automatically show inputmethod
 //        val inputMethodManager = requireActivity()
 //            .getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
 //        inputMethodManager.showSoftInput(view.findFocus(), InputMethodManager.SHOW_IMPLICIT)

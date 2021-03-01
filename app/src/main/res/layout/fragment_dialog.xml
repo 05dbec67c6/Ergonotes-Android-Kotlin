@@ -1,4 +1,6 @@
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
@@ -8,51 +10,52 @@
 
     </data>
 
-    <LinearLayout
-        android:layout_width="200dp"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
 
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="64dp"
-            android:background="#FFFFBB33"
-            android:contentDescription="@string/app_name"
-            android:scaleType="center" />
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-        <Button
-            android:id="@+id/button"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constraint_layout_dialog"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="delete" />
+            android:layout_height="match_parent"
+            android:background="#000000">
 
-        <EditText
-            android:id="@+id/username"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="4dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginRight="4dp"
-            android:layout_marginBottom="4dp"
-            android:hint="@string/username"
-            android:inputType="textEmailAddress" />
 
-        <EditText
-            android:id="@+id/password"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="4dp"
-            android:layout_marginTop="4dp"
-            android:layout_marginRight="4dp"
-            android:layout_marginBottom="16dp"
-            android:fontFamily="sans-serif"
-            android:hint="@string/password"
-            android:inputType="textPassword" />
+            <TextView
+                android:id="@+id/textView_dialog_fragment"
+                android:layout_width="0dp"
+                android:layout_height="45dp"
+                android:background="@color/silver"
+                android:gravity="center"
+                android:text="Do you really want to delete that note?"
+                app:layout_constraintBottom_toTopOf="@+id/button_cancel_dialog"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
 
-        <Button
-            android:id="@+id/button2"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Cancel" />
-    </LinearLayout>
+            <Button
+                android:id="@+id/button_cancel_dialog"
+                style="@style/Widget.AppCompat.Button"
+                android:layout_width="0dp"
+                android:layout_height="90dp"
+                android:background="#FFCDD2"
+                android:text="Cancel"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/button_delete_dialog"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <Button
+                android:id="@+id/button_delete_dialog"
+                android:layout_width="0dp"
+                android:layout_height="90dp"
+                android:background="#DCEDC8"
+                android:text="Yes"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/button_cancel_dialog" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+</FrameLayout>
 </layout>
