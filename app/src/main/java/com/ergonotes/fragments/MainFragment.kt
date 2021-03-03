@@ -1,15 +1,19 @@
-package com.ergonotes.mainfragment
+package com.ergonotes.fragments
 
+import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.widget.PopupMenu
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.ergonotes.R
 import com.ergonotes.database.NoteDatabase
 import com.ergonotes.databinding.FragmentMainBinding
@@ -17,8 +21,13 @@ import com.ergonotes.mainfragment.recyclerview.NoteEntryAdapterNotes
 import com.ergonotes.mainfragment.recyclerview.NoteEntryAdapterTitles
 import com.ergonotes.mainfragment.recyclerview.NoteEntryNotesListener
 import com.ergonotes.mainfragment.recyclerview.NoteEntryTitlesListener
+import com.ergonotes.viewmodelfactories.MainFragmentViewModelFactory
+import com.ergonotes.viewmodels.MainFragmentViewModel
+import kotlinx.android.synthetic.main.fragment_main.*
 
-class MainFragmentUIController : Fragment() {
+
+class MainFragment : Fragment() {
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -56,10 +65,20 @@ class MainFragmentUIController : Fragment() {
 // -------------------------------------------------------------------------------------------------
 // Setting up Recyclerview in Gridlayout------------------------------------------------------------
 
-        val managerNotes = GridLayoutManager(activity, mainFragmentViewModel.numberOfColumns)
+        val managerNotes = GridLayoutManager(
+            activity,
+            mainFragmentViewModel.numberOfColumns,
+            GridLayoutManager.HORIZONTAL,
+            false
+        )
         binding.recyclerViewNotes.layoutManager = managerNotes
 
-        val managerTitles = GridLayoutManager(activity, mainFragmentViewModel.numberOfColumns)
+        val managerTitles = GridLayoutManager(
+            activity,
+            mainFragmentViewModel.numberOfColumns,
+            GridLayoutManager.HORIZONTAL,
+            false
+        )
         binding.recyclerViewTitles.layoutManager = managerTitles
 
 // -------------------------------------------------------------------------------------------------
@@ -97,8 +116,7 @@ class MainFragmentUIController : Fragment() {
         mainFragmentViewModel.navigateToNewFragment.observe(viewLifecycleOwner, Observer { note ->
             note?.let {
                 this.findNavController().navigate(
-                    MainFragmentUIControllerDirections
-                        .actionMainFragmentUIControllerToNewFragmentUIController(note)
+                    MainFragmentDirections.actionMainFragmentToNewFragment(note)
                 )
             }
         })
@@ -114,13 +132,58 @@ class MainFragmentUIController : Fragment() {
             mainFragmentViewModel.onPressNewNote()
 
         }
-//            mainFragmentViewModel.onPressNewNote()
-        binding.buttonSearching.setOnClickListener {
-            mainFragmentViewModel.onClear()
+
+        val scrollListeners = arrayOfNulls<RecyclerView.OnScrollListener>(2)
+        scrollListeners[0] = object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+                scrollListeners[1]?.let { binding.recyclerViewNotes.removeOnScrollListener(it) }
+                binding.recyclerViewNotes.scrollBy(dx, dy)
+                scrollListeners[1]?.let { binding.recyclerViewNotes.addOnScrollListener(it) }
+            }
         }
+        scrollListeners[1] = object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+                scrollListeners[0]?.let { binding.recyclerViewTitles.removeOnScrollListener(it) }
+                binding.recyclerViewTitles.scrollBy(dx, dy)
+                scrollListeners[0]?.let { binding.recyclerViewTitles.addOnScrollListener(it) }
+            }
+        }
+        scrollListeners[0]?.let { binding.recyclerViewTitles.addOnScrollListener(it) }
+        scrollListeners[1]?.let { binding.recyclerViewNotes.addOnScrollListener(it) }
 
 // -------------------------------------------------------------------------------------------------
 // New stuff here--------------------------------------------------------------------------------
+
+
+
+        binding.recyclerViewTitles.setOnLongClickListener {
+                val pop = context?.let { it1 -> PopupMenu(it1, it) }
+            if (pop != null) {
+                pop.inflate(R.menu.show_menu)
+            }
+
+            if (pop != null) {
+                pop.setOnMenuItemClickListener { item ->
+
+                    when (item.itemId) {
+                        R.id.context_menu_editText -> {
+
+                        }
+                        R.id.context_menu_delete -> {
+
+                        }
+                    }
+                    true
+                }
+            }
+            if (pop != null) {
+                pop.show()
+            }
+                true
+            }
+
 
 
 // -------------------------------------------------------------------------------------------------

@@ -41,4 +41,9 @@
     <string name="ok">ok</string>
     <string name="username">No</string>
     <string name="password">No</string>
+    <string name="yes">Yes</string>
+    <string name="cancelwer">Cancel</string>
+    <string name="do_you_really_want_to_delete_that_note">Do you really want to delete the note?</string>
+    <string name="menu_custom_edit">edit</string>
+    <string name="menu_custom_delete">delete</string>
 </resources>

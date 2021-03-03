@@ -1,4 +1,4 @@
-package com.ergonotes.mainfragment
+package com.ergonotes.viewmodels
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel

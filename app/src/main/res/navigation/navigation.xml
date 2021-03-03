@@ -8,46 +8,52 @@
 
     <fragment
         android:id="@+id/mainFragmentUIController"
-        android:name="com.ergonotes.mainfragment.MainFragmentUIController"
+        android:name="com.ergonotes.fragments.MainFragment"
         android:label="MainFragmentUIController"
         tools:layout="@layout/fragment_main">
         <action
-            android:id="@+id/action_mainFragmentUIController_to_newFragmentUIController"
-            app:destination="@id/newFragmentUIController"
-            app:enterAnim="@anim/nav_default_enter_anim"
-            app:exitAnim="@anim/nav_default_exit_anim" />
+            android:id="@+id/action_mainFragment_to_newFragment"
+            app:destination="@id/newFragmentUIController" />
+        <action
+            android:id="@+id/action_mainFragment_to_dialogFragment"
+            app:destination="@id/DialogFragment" />
+        <argument
+            android:name="noteEntryKey"
+            app:argType="long"
+            android:defaultValue="-1L" />
     </fragment>
 
     <fragment
         android:id="@+id/newFragmentUIController"
-        android:name="com.ergonotes.newfragment.NewFragmentUIController"
+        android:name="com.ergonotes.fragments.NewFragment"
         android:label="NewFragmentUIController"
         tools:layout="@layout/fragment_new">
         <argument
             android:name="noteEntryKey"
-            app:argType="long" />
+            app:argType="long"
+            android:defaultValue="-1L" />
         <action
-            android:id="@+id/action_newFragmentUIController_to_mainFragmentUIController"
+            android:id="@+id/action_newFragment_to_mainFragment"
             app:destination="@id/mainFragmentUIController" />
         <action
-            android:id="@+id/action_newFragmentUIController_to_fireMissilesDialogFragment"
-            app:destination="@id/fireMissilesDialogFragment" />
+            android:id="@+id/action_newFragment_to_dialogFragment"
+            app:destination="@id/DialogFragment" />
 
     </fragment>
     <fragment
-        android:id="@+id/fireMissilesDialogFragment"
-        android:name="com.ergonotes.dialogfragment.DialogFragmentUIController"
-        android:label="FireMissilesDialogFragment"
+        android:id="@+id/DialogFragment"
+        android:name="com.ergonotes.fragments.DialogFragment"
+        android:label="DialogFragment"
         tools:layout="@layout/fragment_dialog">
         <action
-            android:id="@+id/action_fireMissilesDialogFragment_to_mainFragmentUIController"
+            android:id="@+id/action_dialogFragment_to_mainFragment"
             app:destination="@id/mainFragmentUIController" />
         <argument
             android:name="noteEntryKey"
             app:argType="long"
             android:defaultValue="-1L" />
         <action
-            android:id="@+id/action_fireMissilesDialogFragment_to_newFragmentUIController"
+            android:id="@+id/action_dialogFragment_to_newFragment"
             app:destination="@id/newFragmentUIController" />
     </fragment>
 

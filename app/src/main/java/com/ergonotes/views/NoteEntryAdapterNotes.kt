@@ -8,8 +8,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.ergonotes.database.NoteEntry
 import com.ergonotes.databinding.ListItemNoteBinding
 
-class NoteEntryAdapterNotes(val clickListener: NoteEntryNotesListener) : ListAdapter<NoteEntry,
-        NoteEntryAdapterNotes.ViewHolder>(NoteEntryNotesDiffCallback()) {
+class NoteEntryAdapterNotes(val clickListener: NoteEntryNotesListener) :
+    ListAdapter<NoteEntry, NoteEntryAdapterNotes.ViewHolder>(NoteEntryNotesDiffCallback()) {
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.bind(getItem(position)!!, clickListener)

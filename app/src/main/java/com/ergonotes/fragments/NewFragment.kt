@@ -1,6 +1,5 @@
-package com.ergonotes.newfragment
+package com.ergonotes.fragments
 
-import android.content.pm.ActivityInfo
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -13,10 +12,10 @@ import androidx.navigation.fragment.findNavController
 import com.ergonotes.R
 import com.ergonotes.database.NoteDatabase
 import com.ergonotes.databinding.FragmentNewBinding
+import com.ergonotes.viewmodelfactories.NewFragmentViewModelFactory
+import com.ergonotes.viewmodels.NewFragmentViewModel
 
-class NewFragmentUIController : Fragment() {
-
-    private lateinit var newFragmentViewModel: NewFragmentViewModel
+class NewFragment : Fragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -30,7 +29,7 @@ class NewFragmentUIController : Fragment() {
         val application = requireNotNull(this.activity).application
 
         // Arguments from MainFragment
-        val arguments = NewFragmentUIControllerArgs.fromBundle(requireArguments())
+        val arguments = NewFragmentArgs.fromBundle(requireArguments())
 
 // -------------------------------------------------------------------------------------------------
 // Setting up ViewModel and Factory-----------------------------------------------------------------
@@ -57,8 +56,7 @@ class NewFragmentUIController : Fragment() {
         // Button - Go to main without saving
         binding.buttonBack.setOnClickListener {
             view?.findNavController()?.navigate(
-                NewFragmentUIControllerDirections
-                    .actionNewFragmentUIControllerToMainFragmentUIController()
+                NewFragmentDirections.actionNewFragmentToMainFragment()
             )
         }
 
@@ -74,16 +72,14 @@ class NewFragmentUIController : Fragment() {
                 binding.editTextTitle.hasFocus() && binding.editTextTitle.text.toString() == ""
                 -> {
                     findNavController().navigate(
-                        NewFragmentUIControllerDirections
-                            .actionNewFragmentUIControllerToFireMissilesDialogFragment(arguments.noteEntryKey)
+                        NewFragmentDirections.actionNewFragmentToDialogFragment(arguments.noteEntryKey)
                     )
                 }
 
                 binding.editTextNote.hasFocus() && binding.editTextNote.text.toString() == ""
                 -> {
                     findNavController().navigate(
-                        NewFragmentUIControllerDirections
-                            .actionNewFragmentUIControllerToFireMissilesDialogFragment(arguments.noteEntryKey)
+                        NewFragmentDirections.actionNewFragmentToDialogFragment(arguments.noteEntryKey)
 
                     )
                 }
@@ -114,8 +110,7 @@ class NewFragmentUIController : Fragment() {
             )
 
             view?.findNavController()?.navigate(
-                NewFragmentUIControllerDirections
-                    .actionNewFragmentUIControllerToMainFragmentUIController()
+                NewFragmentDirections.actionNewFragmentToMainFragment()
             )
         }
 
@@ -123,7 +118,6 @@ class NewFragmentUIController : Fragment() {
 // -------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------
 // Experimental here, later XML---------------------------------------------------------------------
-
 
 
         //automatically show inputmethod
@@ -135,19 +129,6 @@ class NewFragmentUIController : Fragment() {
 
 
         return binding.root
-    }
-
-
-    // -------------------------------------------------------------------------------------------------
-    override fun onResume() {
-        super.onResume()
-        activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_PORTRAIT;
-    }
-
-    // -------------------------------------------------------------------------------------------------
-    override fun onPause() {
-        super.onPause()
-        activity?.requestedOrientation = ActivityInfo.SCREEN_ORIENTATION_FULL_SENSOR;
     }
 }
 

@@ -11,8 +11,8 @@ data class NoteEntry(
     var noteId: Long = 0L,
 
     @ColumnInfo(name = "note_entry_title")
-    var noteEntryTitle: String = "title_dummy",
+    var noteEntryTitle: String = "",
 
     @ColumnInfo(name = "note_entry_note")
-    var noteEntryNote: String = "note_dummy",
+    var noteEntryNote: String = ""
 )
