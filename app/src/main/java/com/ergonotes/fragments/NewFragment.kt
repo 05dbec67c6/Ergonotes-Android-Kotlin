@@ -1,5 +1,6 @@
 package com.ergonotes.fragments
 
+import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -8,7 +9,6 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
-import androidx.navigation.fragment.findNavController
 import com.ergonotes.R
 import com.ergonotes.database.NoteDatabase
 import com.ergonotes.databinding.FragmentNewBinding
@@ -68,21 +68,6 @@ class NewFragment : Fragment() {
 
                 binding.editTextNote.hasFocus() && binding.editTextNote.text.toString() != ""
                 -> binding.editTextNote.setText("")
-
-                binding.editTextTitle.hasFocus() && binding.editTextTitle.text.toString() == ""
-                -> {
-                    findNavController().navigate(
-                        NewFragmentDirections.actionNewFragmentToDialogFragment(arguments.noteEntryKey)
-                    )
-                }
-
-                binding.editTextNote.hasFocus() && binding.editTextNote.text.toString() == ""
-                -> {
-                    findNavController().navigate(
-                        NewFragmentDirections.actionNewFragmentToDialogFragment(arguments.noteEntryKey)
-
-                    )
-                }
             }
         }
 
@@ -106,7 +91,7 @@ class NewFragment : Fragment() {
 
             newFragmentViewModel.onSetNote(
                 titleString = binding.editTextTitle.text.toString(),
-                noteString = binding.editTextNote.text.toString()
+                noteString = binding.editTextNote.text.toString(),
             )
 
             view?.findNavController()?.navigate(
@@ -120,6 +105,8 @@ class NewFragment : Fragment() {
 // Experimental here, later XML---------------------------------------------------------------------
 
 
+        binding.editTextNote.requestFocus()
+        binding.editTextNote.setSelection(binding.editTextNote.length())
         //automatically show inputmethod
 //        val inputMethodManager = requireActivity()
 //            .getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager

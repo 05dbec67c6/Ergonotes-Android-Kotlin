@@ -1,33 +1,33 @@
 package com.ergonotes.fragments
 
-import android.graphics.Color
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.widget.PopupMenu
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.fragment.navArgs
+import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.ergonotes.R
 import com.ergonotes.database.NoteDatabase
 import com.ergonotes.databinding.FragmentMainBinding
-import com.ergonotes.mainfragment.recyclerview.NoteEntryAdapterNotes
-import com.ergonotes.mainfragment.recyclerview.NoteEntryAdapterTitles
-import com.ergonotes.mainfragment.recyclerview.NoteEntryNotesListener
-import com.ergonotes.mainfragment.recyclerview.NoteEntryTitlesListener
 import com.ergonotes.viewmodelfactories.MainFragmentViewModelFactory
 import com.ergonotes.viewmodels.MainFragmentViewModel
-import kotlinx.android.synthetic.main.fragment_main.*
+import com.ergonotes.views.NotesAdapter
+import com.ergonotes.views.TitlesAdapter
 
 
 class MainFragment : Fragment() {
 
+    private var numberOfRows: Int = 1
+    private var numberOfColumns: Int = 1
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -62,34 +62,52 @@ class MainFragment : Fragment() {
 
         binding.lifecycleOwner = this
 
+
 // -------------------------------------------------------------------------------------------------
 // Setting up Recyclerview in Gridlayout------------------------------------------------------------
+        loadSettings()
 
-        val managerNotes = GridLayoutManager(
-            activity,
-            mainFragmentViewModel.numberOfColumns,
-            GridLayoutManager.HORIZONTAL,
-            false
-        )
+
+        val managerNotes = object : GridLayoutManager(
+            activity, numberOfRows, HORIZONTAL, false
+        ) {
+            override fun checkLayoutParams(lp: RecyclerView.LayoutParams): Boolean {
+                lp.width = width / numberOfColumns
+                return true
+            }
+        }
+
         binding.recyclerViewNotes.layoutManager = managerNotes
 
-        val managerTitles = GridLayoutManager(
-            activity,
-            mainFragmentViewModel.numberOfColumns,
-            GridLayoutManager.HORIZONTAL,
-            false
-        )
+        val managerTitles = object : GridLayoutManager(
+            activity, numberOfRows, HORIZONTAL, false
+        ) {
+            override fun checkLayoutParams(lp: RecyclerView.LayoutParams): Boolean {
+                lp.width = width / numberOfColumns
+                return true
+            }
+        }
+
         binding.recyclerViewTitles.layoutManager = managerTitles
+
+//        binding.recyclerViewTitles.layoutManager = object :
+//            GridLayoutManager(activity, nurequireContext()) {
+//            override fun checkLayoutParams(lp: RecyclerView.LayoutParams): Boolean {
+//                // force height of viewHolder here, this will override layout_height from xml
+//                lp.height = height / 2
+//                lp.width = 200
+//                return true
+//            }
+//        }
 
 // -------------------------------------------------------------------------------------------------
 // Instance of adapter that handles click on listItem and submit recyclerviews list-----------------
 
         // RecyclerView of Notes
-        val adapterNotes = NoteEntryAdapterNotes(NoteEntryNotesListener { noteId ->
-            mainFragmentViewModel.onNoteClicked(noteId)
-        })
+        val adapterNotes = NotesAdapter()
 
         binding.recyclerViewNotes.adapter = adapterNotes
+
 
         // Submitting the whole list of notes for the recyclerview
         mainFragmentViewModel.allNotes.observe(viewLifecycleOwner, Observer {
@@ -97,20 +115,15 @@ class MainFragment : Fragment() {
                 adapterNotes.submitList(it)
             }
         })
-
-        // RecyclerView of Titles
-        val adapterTitles = NoteEntryAdapterTitles(NoteEntryTitlesListener { noteId ->
-            mainFragmentViewModel.onNoteClicked(noteId)
-        })
-
-        binding.recyclerViewTitles.adapter = adapterTitles
-
-        // Observe and submit the whole list of titles for the recyclerview
-        mainFragmentViewModel.allNotes.observe(viewLifecycleOwner, Observer {
-            it?.let {
-                adapterTitles.submitList(it)
+        fun subscribeUi(adapter: TitlesAdapter) {
+            mainFragmentViewModel.allNotes.observe(viewLifecycleOwner) { notes ->
+                adapter.submitList(notes)
             }
-        })
+        }
+        // RecyclerView of Titles
+        val adapterTitles = TitlesAdapter()
+        binding.recyclerViewTitles.adapter = adapterTitles
+        subscribeUi(adapterTitles)
 
         // On item click
         mainFragmentViewModel.navigateToNewFragment.observe(viewLifecycleOwner, Observer { note ->
@@ -120,6 +133,7 @@ class MainFragment : Fragment() {
                 )
             }
         })
+
 
         // Button - Exit app
         binding.buttonExit.setOnClickListener {
@@ -157,37 +171,64 @@ class MainFragment : Fragment() {
 // New stuff here--------------------------------------------------------------------------------
 
 
+        binding.button.setOnLongClickListener {
+            Toast.makeText(activity, "Toast", Toast.LENGTH_SHORT).show()
+            true
+        }
 
-        binding.recyclerViewTitles.setOnLongClickListener {
-                val pop = context?.let { it1 -> PopupMenu(it1, it) }
-            if (pop != null) {
-                pop.inflate(R.menu.show_menu)
-            }
+        binding.buttonSettings.setOnClickListener {
+            view?.findNavController()?.navigate(
+                MainFragmentDirections.actionMainFragmentToSettingsFragment()
+            )
 
-            if (pop != null) {
-                pop.setOnMenuItemClickListener { item ->
+        }
 
-                    when (item.itemId) {
-                        R.id.context_menu_editText -> {
+        //val relativeLayout: RelativeLayout = findViewById(R.id.relativeLayout)
+//        val recyclerViewItem = ConstraintLayout(requireContext())
+//
+//        val constraint: ConstraintLayout = constraint_layout_note
+//
+//        val params = ConstraintLayout.LayoutParams(
+//            400,
+//            ConstraintLayout.LayoutParams.MATCH_PARENT
+//        )
+//        constraint.layoutParams = params
 
-                        }
-                        R.id.context_menu_delete -> {
+//
 
-                        }
-                    }
-                    true
-                }
-            }
-            if (pop != null) {
-                pop.show()
-            }
-                true
-            }
 
+//        val params = ConstraintLayout.LayoutParams(
+//            ConstraintLayout.LayoutParams.MATCH_PARENT,
+//            ConstraintLayout.LayoutParams.WRAP_CONTENT
+//        )
+//        params.setMargins(0, 20, 0, 40)
+//        params.height = 1
+//        params. width = 1
+//        constraint_layout_note.layoutParams = params
+
+        //apply the default width and height constraints in code
+//        val constraints = ConstraintSet()
+//        constraints.clone(parent)
+//        constraints.constrainDefaultHeight(view.id, ConstraintSet.MATCH_CONSTRAINT_SPREAD)
+//        constraints.constrainDefaultWidth(view.id, ConstraintSet.MATCH_CONSTRAINT_SPREAD)
+//        constraints.applyTo(parent)
 
 
 // -------------------------------------------------------------------------------------------------
         return binding.root
     }
+
+    private fun loadSettings() {
+        val settingsManager: SharedPreferences = PreferenceManager
+            .getDefaultSharedPreferences(context)
+
+        val rows = settingsManager.getString("rows", "2")
+        val columns = settingsManager.getString("columns", "2")
+
+        numberOfRows = rows!!.toInt()
+        numberOfColumns = columns!!.toInt()
+    }
 }
+
+
 

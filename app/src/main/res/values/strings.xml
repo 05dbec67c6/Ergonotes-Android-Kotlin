@@ -46,4 +46,19 @@
     <string name="do_you_really_want_to_delete_that_note">Do you really want to delete the note?</string>
     <string name="menu_custom_edit">edit</string>
     <string name="menu_custom_delete">delete</string>
+    <!-- Preference Titles -->
+    <string name="look_header">Look</string>
+    <string name="sync_header">Sync</string>
+
+    <!-- Messages Preferences -->
+    <string name="signature_title">Look</string>
+    <string name="reply_title">Number of Columns</string>
+
+    <!-- Sync Preferences -->
+    <string name="sync_title">Sync email periodically</string>
+    <string name="attachment_title">Download incoming attachments</string>
+    <string name="attachment_summary_on">Automatically download attachments for incoming emails
+    </string>
+    <string name="attachment_summary_off">Only download attachments when manually requested</string>
+    <string name="notepreview">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque dapibus ante felis, nec vehicula massa imperdiet quis. Vivamus in rhoncus tortor, rutrum dapibus lorem. Morbi at risus erat. Etiam ac velit velit.</string>
 </resources>

@@ -9,6 +9,7 @@
         <variable
             name="mainFragmentViewModel"
             type="com.ergonotes.viewmodels.MainFragmentViewModel" />
+
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -22,7 +23,6 @@
             android:id="@+id/recycler_view_notes"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:background="@color/black"
             app:layout_constraintBottom_toTopOf="@id/toolbar"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -35,7 +35,6 @@
             android:id="@+id/toolbar"
             android:layout_width="0dp"
             android:layout_height="45dp"
-            android:background="#000000"
             app:layout_constraintBottom_toTopOf="@id/recycler_view_titles"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -56,10 +55,10 @@
             <ImageButton
                 android:id="@+id/button"
                 style="@style/Widget.AppCompat.ImageButton"
-                android:onClick="showPopup"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:background="@drawable/my_button_bg"
+                android:onClick="showPopup"
                 android:src="@drawable/ic_baseline_search_24"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/button_settings"
@@ -97,7 +96,6 @@
             android:id="@+id/recycler_view_titles"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:background="@color/black"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

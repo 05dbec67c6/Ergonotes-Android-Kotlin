@@ -4,57 +4,78 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/navigation"
-    app:startDestination="@id/mainFragmentUIController">
+    app:startDestination="@id/mainFragment">
 
     <fragment
-        android:id="@+id/mainFragmentUIController"
+        android:id="@+id/mainFragment"
         android:name="com.ergonotes.fragments.MainFragment"
-        android:label="MainFragmentUIController"
+        android:label="MainFragment"
         tools:layout="@layout/fragment_main">
         <action
             android:id="@+id/action_mainFragment_to_newFragment"
-            app:destination="@id/newFragmentUIController" />
+            app:destination="@id/newFragment" />
         <action
             android:id="@+id/action_mainFragment_to_dialogFragment"
             app:destination="@id/DialogFragment" />
         <argument
             android:name="noteEntryKey"
-            app:argType="long"
-            android:defaultValue="-1L" />
+            android:defaultValue="-1L"
+            app:argType="long" />
+        <action
+            android:id="@+id/action_mainFragment_to_settingsFragment"
+            app:destination="@id/settingsFragment" />
+        <action
+            android:id="@+id/action_mainFragment_to_editFragment"
+            app:destination="@id/editFragment" />
     </fragment>
 
     <fragment
-        android:id="@+id/newFragmentUIController"
+        android:id="@+id/newFragment"
         android:name="com.ergonotes.fragments.NewFragment"
-        android:label="NewFragmentUIController"
+        android:label="NewFragment"
         tools:layout="@layout/fragment_new">
         <argument
             android:name="noteEntryKey"
-            app:argType="long"
-            android:defaultValue="-1L" />
+            android:defaultValue="-1L"
+            app:argType="long" />
         <action
             android:id="@+id/action_newFragment_to_mainFragment"
-            app:destination="@id/mainFragmentUIController" />
-        <action
-            android:id="@+id/action_newFragment_to_dialogFragment"
-            app:destination="@id/DialogFragment" />
+            app:destination="@id/mainFragment" />
 
     </fragment>
     <fragment
         android:id="@+id/DialogFragment"
-        android:name="com.ergonotes.fragments.DialogFragment"
+        android:name="com.ergonotes.fragments.DialogDeleteFragment"
         android:label="DialogFragment"
-        tools:layout="@layout/fragment_dialog">
+        tools:layout="@layout/fragment_dialog_delete">
         <action
             android:id="@+id/action_dialogFragment_to_mainFragment"
-            app:destination="@id/mainFragmentUIController" />
+            app:destination="@id/mainFragment" />
+        <argument
+            android:name="noteEntryKey"
+            android:defaultValue="-1L"
+            app:argType="long" />
+    </fragment>
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="com.ergonotes.fragments.SettingsFragment"
+        android:label="SettingsFragment" >
+        <action
+            android:id="@+id/action_settingsFragment_to_mainFragment"
+            app:destination="@id/mainFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/editFragment"
+        android:name="com.ergonotes.fragments.EditFragment"
+        android:label="fragment_edit"
+        tools:layout="@layout/fragment_edit" >
         <argument
             android:name="noteEntryKey"
             app:argType="long"
             android:defaultValue="-1L" />
         <action
-            android:id="@+id/action_dialogFragment_to_newFragment"
-            app:destination="@id/newFragmentUIController" />
+            android:id="@+id/action_editFragment_to_mainFragment"
+            app:destination="@id/mainFragment" />
     </fragment>
 
 </navigation>

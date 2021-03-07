@@ -1,8 +1,10 @@
 package com.ergonotes.viewmodels
 
+import android.content.SharedPreferences
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.preference.PreferenceManager
 import com.ergonotes.database.NoteEntry
 import com.ergonotes.database.NoteEntryDao
 import kotlinx.coroutines.Dispatchers
@@ -30,9 +32,6 @@ class MainFragmentViewModel(
     // Set notes as liveData
     private var newestNote = MutableLiveData<NoteEntry>()
 
-    // Number of columns of recyclerview
-    val numberOfColumns: Int = 3
-
 // -------------------------------------------------------------------------------------------------
 // Button add note----------------------------------------------------------------------------------
 
@@ -42,7 +41,7 @@ class MainFragmentViewModel(
     }
 
     // Create new note
-    fun onPressNewNote() : Long? {
+    fun onPressNewNote(): Long? {
         viewModelScope.launch {
 
             // Variable of databases entity
@@ -63,6 +62,7 @@ class MainFragmentViewModel(
             clear()
         }
     }
+
     private suspend fun clear() {
         withContext(Dispatchers.IO) {
             dataSource.clearDatabase()
@@ -91,6 +91,9 @@ class MainFragmentViewModel(
     init {
         initializeNotes()
     }
+
+
+
 
 }
 
