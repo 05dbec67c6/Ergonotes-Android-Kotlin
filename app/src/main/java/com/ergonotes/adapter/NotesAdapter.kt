@@ -1,4 +1,4 @@
-package com.ergonotes.views
+package com.ergonotes.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -7,7 +7,6 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.ergonotes.database.NoteEntry
 import com.ergonotes.databinding.ListItemNoteBinding
-
 
 class NotesAdapter : ListAdapter<NoteEntry, RecyclerView.ViewHolder>(NotesDiffCallback()) {
 
@@ -27,7 +26,8 @@ class NotesAdapter : ListAdapter<NoteEntry, RecyclerView.ViewHolder>(NotesDiffCa
     }
 }
 
-class NotesViewHolder(private val binding: ListItemNoteBinding
+class NotesViewHolder(
+    private val binding: ListItemNoteBinding
 ) : RecyclerView.ViewHolder(binding.root) {
 
     fun bind(item: NoteEntry) {

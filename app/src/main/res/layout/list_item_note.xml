@@ -32,6 +32,7 @@
             android:paddingBottom="1dp"
             android:text="@{note.noteEntryNote}"
             android:textColor="@{note.noteEntryTextColor}"
+            android:textSize="@{note.noteEntryNoteTextSize}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

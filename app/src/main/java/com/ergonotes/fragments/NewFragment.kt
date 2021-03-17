@@ -1,19 +1,21 @@
 package com.ergonotes.fragments
 
-import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import com.ergonotes.R
 import com.ergonotes.database.NoteDatabase
 import com.ergonotes.databinding.FragmentNewBinding
-import com.ergonotes.viewmodelfactories.NewFragmentViewModelFactory
-import com.ergonotes.viewmodels.NewFragmentViewModel
+import com.ergonotes.viewmodelfactories.NewViewModelFactory
+import com.ergonotes.viewmodels.NewViewModel
 
 class NewFragment : Fragment() {
 
@@ -36,11 +38,12 @@ class NewFragment : Fragment() {
 
         // Create an instance of the ViewModel Factory
         val dataSource = NoteDatabase.getDatabase(application).noteDatabaseDao
-        val viewModelFactory = NewFragmentViewModelFactory(arguments.noteEntryKey, dataSource)
+        val viewModelFactory =
+            NewViewModelFactory(arguments.noteEntryKey, dataSource, application)
 
         // Associate ViewModel with this Fragment
         val newFragmentViewModel = ViewModelProvider(this, viewModelFactory)
-            .get(NewFragmentViewModel::class.java)
+            .get(NewViewModel::class.java)
 
         // Use View Model with data binding
         binding.newFragmentViewModel = newFragmentViewModel
@@ -71,6 +74,16 @@ class NewFragment : Fragment() {
             }
         }
 
+        newFragmentViewModel.navigateToSleepTracker.observe(viewLifecycleOwner, Observer {
+            if (it == true) { // Observed state is true.
+                this.findNavController().navigate(
+                    NewFragmentDirections.actionNewFragmentToMainFragment()
+                )
+                // Reset state to make sure we only navigate once, even if the device
+                // has a configuration change.
+            }
+        })
+
         // Button - Toggle focus between title and note
         binding.buttonToggleFocus.setOnClickListener {
             when {
@@ -86,7 +99,7 @@ class NewFragment : Fragment() {
             }
         }
 
-        // Button - Apply, toast and go back
+         //Button - Apply, toast and go back
         binding.buttonApplyAndGoToMain.setOnClickListener {
 
             newFragmentViewModel.onSetNote(
@@ -98,6 +111,16 @@ class NewFragment : Fragment() {
                 NewFragmentDirections.actionNewFragmentToMainFragment()
             )
         }
+//        newFragmentViewModel.navigateToSleepTracker.observe(
+//            viewLifecycleOwner, Observer {
+//                if (it == true) { // Observed state is true.
+//                    this.findNavController().navigate(
+//                        NewFragmentDirections.actionNewFragmentToMainFragment()
+//                    )
+//                    // Reset state to make sure we only navigate once, even if the device
+//                    // has a configuration change.
+//                }
+//            })
 
 // -------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------
@@ -105,8 +128,17 @@ class NewFragment : Fragment() {
 // Experimental here, later XML---------------------------------------------------------------------
 
 
-        binding.editTextNote.requestFocus()
-        binding.editTextNote.setSelection(binding.editTextNote.length())
+//        val noteTextSizeListener: LiveData<NoteEntry> = newFragmentViewModel.getNote()
+//        noteTextSizeListener.observe(
+//            viewLifecycleOwner,
+//            Observer<NoteEntry> { note: NoteEntry? ->
+//
+//                if (note != null) {
+//                    binding.editTextNote.setText(note.noteEntryNote)
+//                }
+//            })
+
+
         //automatically show inputmethod
 //        val inputMethodManager = requireActivity()
 //            .getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
@@ -114,8 +146,37 @@ class NewFragment : Fragment() {
 //
 //        super.onViewCreated(view, savedInstanceState)
 
+        val text = newFragmentViewModel.getNote()
+
+//        val noteTextListener: LiveData<NoteEntry> = newFragmentViewModel.getNote()
+//        noteTextListener.observe(
+//            viewLifecycleOwner,
+//            Observer<NoteEntry> { note: NoteEntry? ->
+//
+//                if (note != null) {
+//                    binding.editTextNote.setText(note.noteEntryNote)
+//                }
+//            })
+
+        binding.editTextNote.requestFocus()
+        binding.editTextNote.setSelection(binding.editTextNote.length())
 
         return binding.root
+    }
+
+
+    override fun onResume() {
+        super.onResume()
+
+
+//binding
+//        if (binding != null) {
+//            binding.editTextNote.requestFocus()
+//        }
+//        if (binding != null) {
+//            binding.editTextNote.setSelection(binding.editTextNote.length())
+//        }
+//    }
     }
 }
 

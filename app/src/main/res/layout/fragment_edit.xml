@@ -8,105 +8,183 @@
 
         <variable
             name="editFragmentViewModel"
-            type="com.ergonotes.viewmodels.EditFragmentViewModel" />
+            type="com.ergonotes.viewmodels.EditViewModel" />
 
     </data>
 
     <RelativeLayout
+        android:id="@+id/edit_relative_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:context=".fragments.editFragment">
-
-
-        <TextView
-            android:id="@+id/textView_preview_note"
-            android:layout_width="0dp"
-            android:layout_height="158dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="16dp"
-            android:textColor="@{editFragmentViewModel.note.noteEntryTextColor}"
-            android:background="@{editFragmentViewModel.note.noteEntryBackgroundColor}"
-            android:text="@string/notepreview"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/textView_preview_title"
-            android:layout_width="0dp"
-            android:layout_height="35dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
-            android:textColor="@{editFragmentViewModel.note.noteEntryTextColor}"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="296dp"
-            android:background="@{editFragmentViewModel.note.noteEntryBackgroundColor}"
-            android:gravity="center"
-            android:text="TextView"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toTopOf="@+id/button_change_background_color"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView_preview_note" />
-
-        <Button
-            android:id="@+id/button_change_background_color"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/constraint_layout_fragment_edit"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="8dp"
-            android:text="Change background color"
-            app:layout_constraintBottom_toTopOf="@+id/button_change_note_text_size"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/textView_preview_title" />
+            android:layout_height="match_parent"
+            tools:context=".fragments.editFragment">
 
-        <Button
-            android:id="@+id/button_change_note_text_size"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="8dp"
-            android:text="Change text color"
-            app:layout_constraintBottom_toTopOf="@+id/button_save"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/button_change_background_color" />
+            <TextView
+                android:id="@+id/textView_preview_note"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="16dp"
+                android:background="@{editFragmentViewModel.note.noteEntryBackgroundColor}"
+                android:text="@{editFragmentViewModel.note.noteEntryNote}"
+                android:textColor="@{editFragmentViewModel.note.noteEntryTextColor}"
+                android:textSize="@{editFragmentViewModel.note.noteEntryNoteTextSize}"
+                app:layout_constraintBottom_toTopOf="@+id/textView_preview_title"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-        <Button
-            android:id="@+id/button_save"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginBottom="16dp"
-            android:text="Save and back"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/button_cancel" />
+            <TextView
+                android:id="@+id/textView_preview_title"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:background="@{editFragmentViewModel.note.noteEntryBackgroundColor}"
+                android:gravity="center"
+                android:text="@{editFragmentViewModel.note.noteEntryTitle}"
+                android:textColor="@{editFragmentViewModel.note.noteEntryTextColor}"
+                android:textSize="@{editFragmentViewModel.note.noteEntryTitleTextSize}"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView_preview_note" />
 
-        <Button
-            android:id="@+id/button_cancel"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginBottom="16dp"
-            android:text="Cancel"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/button_save"
-            app:layout_constraintStart_toStartOf="parent" />
+            <EditText
+                android:id="@+id/set_note_text_size"
+                android:layout_width="100dp"
+                android:layout_height="45dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="16dp"
+                android:ems="10"
+                android:inputType="numberDecimal"
+                android:text=""
+                app:layout_constraintBottom_toTopOf="@+id/set_title_text_size"
+                app:layout_constraintEnd_toStartOf="@+id/button_change_note_text_size"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView_preview_title" />
 
+            <Button
+                android:id="@+id/button_change_note_text_size"
+                android:layout_width="0dp"
+                android:layout_height="45dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="16dp"
+                android:background="@color/silver"
+                android:text="@string/button_text_preview_note_text_size"
+                app:layout_constraintBottom_toTopOf="@+id/button_change_title_text_size"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/set_note_text_size"
+                app:layout_constraintTop_toBottomOf="@+id/textView_preview_title" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
-        <include layout="@layout/colorpicker" />
+            <EditText
+                android:id="@+id/set_title_text_size"
+                android:layout_width="100dp"
+                android:layout_height="45dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="16dp"
+                android:ems="10"
+                android:inputType="numberDecimal"
+                android:text=""
+                app:layout_constraintBottom_toTopOf="@+id/button_change_background_color"
+                app:layout_constraintEnd_toStartOf="@+id/button_change_title_text_size"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/set_note_text_size" />
+
+            <Button
+                android:id="@+id/button_change_title_text_size"
+                android:layout_width="0dp"
+                android:layout_height="45dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="16dp"
+                android:background="@color/silver"
+                android:text="@string/button_text_preview_title_text_size"
+                app:layout_constraintBottom_toTopOf="@+id/button_change_text_color"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/set_title_text_size"
+                app:layout_constraintTop_toBottomOf="@+id/button_change_note_text_size" />
+
+            <Button
+                android:id="@+id/button_change_background_color"
+                android:layout_width="0dp"
+                android:layout_height="45dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="16dp"
+                android:background="@color/silver"
+                android:text="@string/button_text_change_background_color"
+                app:layout_constraintBottom_toTopOf="@+id/button_cancel"
+                app:layout_constraintEnd_toStartOf="@+id/button_change_text_color"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/set_title_text_size" />
+
+            <Button
+                android:id="@+id/button_change_text_color"
+                android:layout_width="0dp"
+                android:layout_height="45dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="16dp"
+                android:background="@color/silver"
+                android:text="@string/button_text_change_text_color"
+                app:layout_constraintBottom_toTopOf="@+id/button_save_and_go_back"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/button_change_background_color"
+                app:layout_constraintTop_toBottomOf="@id/button_change_title_text_size" />
+
+            <Button
+                android:id="@+id/button_cancel"
+                android:layout_width="0dp"
+                android:layout_height="45dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="16dp"
+                android:background="@color/silver"
+                android:text="@string/button_text_cancel_edit_fragment"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/button_save_and_go_back"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/button_change_background_color" />
+
+            <Button
+                android:id="@+id/button_save_and_go_back"
+                android:layout_width="0dp"
+                android:layout_height="45dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="16dp"
+                android:background="@color/silver"
+                android:text="@string/button_text_save_and_go_back"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/button_cancel"
+                app:layout_constraintTop_toBottomOf="@id/button_change_text_color" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <include
+            android:id="@+id/colorpicker"
+            layout="@layout/colorpicker" />
+
     </RelativeLayout>
+
 </layout>

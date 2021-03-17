@@ -12,8 +12,8 @@ import androidx.navigation.fragment.findNavController
 import com.ergonotes.R
 import com.ergonotes.database.NoteDatabase
 import com.ergonotes.databinding.FragmentDialogDeleteBinding
-import com.ergonotes.viewmodelfactories.DialogDeleteFragmentViewModelFactory
-import com.ergonotes.viewmodels.DialogDeleteFragmentViewModel
+import com.ergonotes.viewmodelfactories.DialogDeleteViewModelFactory
+import com.ergonotes.viewmodels.DialogDeleteViewModel
 
 class DialogDeleteFragment : Fragment() {
 
@@ -22,30 +22,46 @@ class DialogDeleteFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
 
+// -------------------------------------------------------------------------------------------------
+// DataBinding--------------------------------------------------------------------------------------
+
         val binding: FragmentDialogDeleteBinding = DataBindingUtil.inflate(
             inflater, R.layout.fragment_dialog_delete, container, false
         )
+
+// -------------------------------------------------------------------------------------------------
+// Application, arguments, and dataSource for viewModel/Factory-------------------------------------
+
         val application: Application = requireNotNull(this.activity).application
+
         val arguments = DialogDeleteFragmentArgs.fromBundle(requireArguments())
+
         val dataSource = NoteDatabase.getDatabase(application).noteDatabaseDao
+
         val viewModelFactory =
-            DialogDeleteFragmentViewModelFactory(arguments.noteEntryKey, dataSource)
+            DialogDeleteViewModelFactory(arguments.noteEntryKey, dataSource)
+
         val dialogFragmentViewModel = ViewModelProvider(this, viewModelFactory)
-            .get(DialogDeleteFragmentViewModel::class.java)
-        binding.dialogFragmentViewModel = dialogFragmentViewModel
+            .get(DialogDeleteViewModel::class.java)
+
+        binding.dialogDeleteViewModel = dialogFragmentViewModel
+
         binding.lifecycleOwner = this
 
+// -------------------------------------------------------------------------------------------------
+// Buttons------------------------------------------------------------------------------------------
 
+        // Yes to deletion / and go to main
         binding.buttonDeleteDialog.setOnClickListener {
-
             dialogFragmentViewModel.deleteTargetNote()
-
-            findNavController().navigate(DialogDeleteFragmentDirections
-                .actionDialogFragmentToMainFragment())
+            findNavController().navigate(
+                DialogDeleteFragmentDirections
+                    .actionDialogFragmentToMainFragment()
+            )
         }
 
+        // Cancel and go back
         binding.buttonCancelDialog.setOnClickListener {
-
             findNavController().navigate(
                 DialogDeleteFragmentDirections.actionDialogFragmentToMainFragment()
             )

@@ -2,10 +2,53 @@
 
     <string name="app_name">Ergonotes</string>
 
+    <!-- _______________________________________________________________________________________ -->
     <!-- MainFragment___________________________________________________________________________ -->
+    <string name="close_the_app">Close the app</string>
+    <string name="go_to_settings">Go to settings</string>
+    <string name="add_new_note">Add a new note</string>
 
-
+    <!-- _______________________________________________________________________________________ -->
     <!-- NewFragment____________________________________________________________________________ -->
+
+
+    <!-- _______________________________________________________________________________________ -->
+    <!-- DialogDeleteFragment___________________________________________________________________ -->
+    <string name="sure_to_delete">Do you really want to delete the note?</string>
+    <string name="cancel">Cancel</string>
+    <string name="yes">Yes</string>
+
+    <!-- _______________________________________________________________________________________ -->
+    <!-- EditFragment___________________________________________________________________________ -->
+
+    <!-- Buttontexts -->
+    <string name="button_text_preview_note_text_size">Preview note text size</string>
+    <string name="button_text_preview_title_text_size">Preview title text size</string>
+    <string name="button_text_change_background_color">Change background color</string>
+    <string name="button_text_change_text_color">Change text color</string>
+    <string name="button_text_cancel_edit_fragment">Cancel</string>
+    <string name="button_text_save_and_go_back">Save and go back</string>
+
+    <!-- Others -->
+    <string name="enter_value">You have to enter a value.</string>
+    <string name="changes_saved">Saved changes.</string>
+    <string name="autoFill_set_text_size">Set Text Size</string>
+    <string name="autoFill_set_title_text_size">Set Title Text Size</string>
+    <string name="hint_set_title_text_size">set_title_text_size</string>
+    <string name="hint_set_note_text_size">set_note_text_size</string>
+
+    <!-- _______________________________________________________________________________________ -->
+    <!-- SettingsFragment_______________________________________________________________________ -->
+
+    <string name="look_header">Look</string>
+    <string name="number_of_rows">Number of rows</string>
+    <string name="number_of_columns">Number of columns per screen</string>
+    <string name="default_values_header">Default values</string>
+    <string name="default_note_text_size">Default Note Text size</string>
+    <string name="default_title_text_size">Default Title Text size</string>
+
+    <!-- _______________________________________________________________________________________ -->
+
 
     <!-- EditTexts -->
     <!-- Title -->
@@ -32,7 +75,6 @@
     <!-- DialogFragment____________________________________________________________________________ -->
     <string name="dialog_message">20</string>
     <string name="dialog_title">89</string>
-    <string name="cancel">No</string>
     <string name="action_settings">No</string>
     <string name="dialog_fire_missiles">You really wanna delete the whole note?</string>
     <string name="fire">Yes</string>
@@ -41,13 +83,12 @@
     <string name="ok">ok</string>
     <string name="username">No</string>
     <string name="password">No</string>
-    <string name="yes">Yes</string>
-    <string name="cancelwer">Cancel</string>
-    <string name="do_you_really_want_to_delete_that_note">Do you really want to delete the note?</string>
+
+
     <string name="menu_custom_edit">edit</string>
     <string name="menu_custom_delete">delete</string>
     <!-- Preference Titles -->
-    <string name="look_header">Look</string>
+
     <string name="sync_header">Sync</string>
 
     <!-- Messages Preferences -->
@@ -61,4 +102,6 @@
     </string>
     <string name="attachment_summary_off">Only download attachments when manually requested</string>
     <string name="notepreview">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque dapibus ante felis, nec vehicula massa imperdiet quis. Vivamus in rhoncus tortor, rutrum dapibus lorem. Morbi at risus erat. Etiam ac velit velit.</string>
+
+
 </resources>

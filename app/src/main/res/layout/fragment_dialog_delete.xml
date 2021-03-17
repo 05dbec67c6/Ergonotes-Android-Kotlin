@@ -6,12 +6,13 @@
     <data>
 
         <variable
-            name="dialogFragmentViewModel"
-            type="com.ergonotes.viewmodels.DialogDeleteFragmentViewModel" />
+            name="dialogDeleteViewModel"
+            type="com.ergonotes.viewmodels.DialogDeleteViewModel" />
+
     </data>
 
-
     <FrameLayout
+        android:id="@+id/dialog_frame_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -21,14 +22,13 @@
             android:layout_height="match_parent"
             android:background="#000000">
 
-
             <TextView
                 android:id="@+id/textView_dialog_fragment"
                 android:layout_width="0dp"
                 android:layout_height="45dp"
                 android:background="#D5D5D5"
                 android:gravity="center"
-                android:text="@string/do_you_really_want_to_delete_that_note"
+                android:text="@string/sure_to_delete"
                 app:layout_constraintBottom_toTopOf="@+id/button_cancel_dialog"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
@@ -40,7 +40,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:background="#FFCDD2"
-                android:text="@string/cancelwer"
+                android:text="@string/cancel"
                 app:layout_constraintBottom_toTopOf="@+id/guideline2"
                 app:layout_constraintEnd_toStartOf="@id/button_delete_dialog"
                 app:layout_constraintStart_toStartOf="parent" />
@@ -64,11 +64,12 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintGuide_begin="0dp"
-                app:layout_constraintGuide_percent="0.70"
+                app:layout_constraintGuide_percent="0.80"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-
         </androidx.constraintlayout.widget.ConstraintLayout>
+
     </FrameLayout>
+
 </layout>

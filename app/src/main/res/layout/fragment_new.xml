@@ -8,7 +8,11 @@
 
         <variable
             name="newFragmentViewModel"
-            type="com.ergonotes.viewmodels.NewFragmentViewModel" />
+            type="com.ergonotes.viewmodels.NewViewModel" />
+
+        <variable
+            name="note"
+            type="com.ergonotes.database.NoteEntry" />
 
     </data>
 
@@ -29,10 +33,11 @@
             android:background="@{newFragmentViewModel.note.noteEntryBackgroundColor}"
             android:gravity="top|start"
             android:hint="@string/hint_editText_note"
+            android:text="@{newFragmentViewModel.note.noteEntryNote}"
             android:inputType="textMultiLine"
             android:labelFor="@string/label_editText_note"
-            android:text="@{newFragmentViewModel.note.noteEntryNote}"
             android:textColor="@{newFragmentViewModel.note.noteEntryTextColor}"
+            android:textSize="@{newFragmentViewModel.note.noteEntryNoteTextSize}"
             app:layout_constraintBottom_toTopOf="@id/editText_title"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="1.0"
@@ -51,6 +56,7 @@
             android:labelFor="@string/label_editText_title"
             android:text="@{newFragmentViewModel.note.noteEntryTitle}"
             android:textColor="@{newFragmentViewModel.note.noteEntryTextColor}"
+            android:textSize="@{newFragmentViewModel.note.noteEntryTitleTextSize}"
             android:textStyle="bold"
             app:layout_constraintBottom_toTopOf="@id/toolbar"
             app:layout_constraintEnd_toEndOf="parent"
@@ -140,6 +146,13 @@
                 app:srcCompat="@drawable/ic_baseline_check_24" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="248dp"
+            android:layout_height="93dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/editText_note" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

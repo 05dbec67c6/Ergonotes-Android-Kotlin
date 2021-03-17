@@ -1,6 +1,7 @@
 package com.ergonotes.fragments
 
 import android.content.SharedPreferences
+import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -16,18 +17,15 @@ import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.ergonotes.R
+import com.ergonotes.adapter.NotesAdapter
+import com.ergonotes.adapter.TitlesAdapter
 import com.ergonotes.database.NoteDatabase
 import com.ergonotes.databinding.FragmentMainBinding
-import com.ergonotes.viewmodelfactories.MainFragmentViewModelFactory
-import com.ergonotes.viewmodels.MainFragmentViewModel
-import com.ergonotes.views.NotesAdapter
-import com.ergonotes.views.TitlesAdapter
-
+import com.ergonotes.viewmodelfactories.MainViewModelFactory
+import com.ergonotes.viewmodels.MainViewModel
 
 class MainFragment : Fragment() {
 
-    private var numberOfRows: Int = 1
-    private var numberOfColumns: Int = 1
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -35,198 +33,198 @@ class MainFragment : Fragment() {
     ): View {
 
 // -------------------------------------------------------------------------------------------------
-// Reference binding object and inflate fragment----------------------------------------------------
+// Databinding--------------------------------------------------------------------------------------
 
         val binding: FragmentMainBinding = DataBindingUtil.inflate(
             inflater, R.layout.fragment_main, container, false
         )
 
+// -------------------------------------------------------------------------------------------------
+// Application, arguments, and dataSource for viewModel/Factory-------------------------------------
+
         val application = requireNotNull(this.activity).application
 
-// -------------------------------------------------------------------------------------------------
-// Setting up ViewModel and Factory-----------------------------------------------------------------
+        val dataBase = NoteDatabase.getDatabase(application).noteDatabaseDao
 
-        // Create an instance of the ViewModel Factory
-        val dataSource = NoteDatabase.getDatabase(application).noteDatabaseDao
-        val viewModelFactory = MainFragmentViewModelFactory(dataSource)
+        val viewModelFactory = MainViewModelFactory(dataBase)
 
-        // Associate ViewModel with this Fragment
-        val mainFragmentViewModel = ViewModelProvider(this, viewModelFactory)
-            .get(MainFragmentViewModel::class.java)
+        val mainViewModel = ViewModelProvider(this, viewModelFactory)
+            .get(MainViewModel::class.java)
 
-        // Use View Model with data binding
-        binding.mainFragmentViewModel = mainFragmentViewModel
-
-// -------------------------------------------------------------------------------------------------
-// Setting current activity as lifecycle owner of the binding for LiveData--------------------------
+        binding.mainFragmentViewModel = mainViewModel
 
         binding.lifecycleOwner = this
 
-
 // -------------------------------------------------------------------------------------------------
-// Setting up Recyclerview in Gridlayout------------------------------------------------------------
-        loadSettings()
+// Load settings------------------------------------------------------------------------------------
 
 
-        val managerNotes = object : GridLayoutManager(
-            activity, numberOfRows, HORIZONTAL, false
-        ) {
-            override fun checkLayoutParams(lp: RecyclerView.LayoutParams): Boolean {
-                lp.width = width / numberOfColumns
-                return true
-            }
-        }
-
-        binding.recyclerViewNotes.layoutManager = managerNotes
-
-        val managerTitles = object : GridLayoutManager(
-            activity, numberOfRows, HORIZONTAL, false
-        ) {
-            override fun checkLayoutParams(lp: RecyclerView.LayoutParams): Boolean {
-                lp.width = width / numberOfColumns
-                return true
-            }
-        }
-
-        binding.recyclerViewTitles.layoutManager = managerTitles
-
-//        binding.recyclerViewTitles.layoutManager = object :
-//            GridLayoutManager(activity, nurequireContext()) {
-//            override fun checkLayoutParams(lp: RecyclerView.LayoutParams): Boolean {
-//                // force height of viewHolder here, this will override layout_height from xml
-//                lp.height = height / 2
-//                lp.width = 200
-//                return true
-//            }
-//        }
-
-// -------------------------------------------------------------------------------------------------
-// Instance of adapter that handles click on listItem and submit recyclerviews list-----------------
-
-        // RecyclerView of Notes
-        val adapterNotes = NotesAdapter()
-
-        binding.recyclerViewNotes.adapter = adapterNotes
-
-
-        // Submitting the whole list of notes for the recyclerview
-        mainFragmentViewModel.allNotes.observe(viewLifecycleOwner, Observer {
-            it?.let {
-                adapterNotes.submitList(it)
-            }
-        })
-        fun subscribeUi(adapter: TitlesAdapter) {
-            mainFragmentViewModel.allNotes.observe(viewLifecycleOwner) { notes ->
-                adapter.submitList(notes)
-            }
-        }
-        // RecyclerView of Titles
-        val adapterTitles = TitlesAdapter()
-        binding.recyclerViewTitles.adapter = adapterTitles
-        subscribeUi(adapterTitles)
-
-        // On item click
-        mainFragmentViewModel.navigateToNewFragment.observe(viewLifecycleOwner, Observer { note ->
-            note?.let {
-                this.findNavController().navigate(
-                    MainFragmentDirections.actionMainFragmentToNewFragment(note)
-                )
-            }
-        })
-
-
-        // Button - Exit app
-        binding.buttonExit.setOnClickListener {
-            activity?.finish()
-        }
-
-        // Button New
-        binding.buttonAdd.setOnClickListener {
-
-            mainFragmentViewModel.onPressNewNote()
-
-        }
-
-        val scrollListeners = arrayOfNulls<RecyclerView.OnScrollListener>(2)
-        scrollListeners[0] = object : RecyclerView.OnScrollListener() {
-            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                super.onScrolled(recyclerView, dx, dy)
-                scrollListeners[1]?.let { binding.recyclerViewNotes.removeOnScrollListener(it) }
-                binding.recyclerViewNotes.scrollBy(dx, dy)
-                scrollListeners[1]?.let { binding.recyclerViewNotes.addOnScrollListener(it) }
-            }
-        }
-        scrollListeners[1] = object : RecyclerView.OnScrollListener() {
-            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                super.onScrolled(recyclerView, dx, dy)
-                scrollListeners[0]?.let { binding.recyclerViewTitles.removeOnScrollListener(it) }
-                binding.recyclerViewTitles.scrollBy(dx, dy)
-                scrollListeners[0]?.let { binding.recyclerViewTitles.addOnScrollListener(it) }
-            }
-        }
-        scrollListeners[0]?.let { binding.recyclerViewTitles.addOnScrollListener(it) }
-        scrollListeners[1]?.let { binding.recyclerViewNotes.addOnScrollListener(it) }
-
-// -------------------------------------------------------------------------------------------------
-// New stuff here--------------------------------------------------------------------------------
-
-
-        binding.button.setOnLongClickListener {
-            Toast.makeText(activity, "Toast", Toast.LENGTH_SHORT).show()
-            true
-        }
-
-        binding.buttonSettings.setOnClickListener {
-            view?.findNavController()?.navigate(
-                MainFragmentDirections.actionMainFragmentToSettingsFragment()
-            )
-
-        }
-
-        //val relativeLayout: RelativeLayout = findViewById(R.id.relativeLayout)
-//        val recyclerViewItem = ConstraintLayout(requireContext())
-//
-//        val constraint: ConstraintLayout = constraint_layout_note
-//
-//        val params = ConstraintLayout.LayoutParams(
-//            400,
-//            ConstraintLayout.LayoutParams.MATCH_PARENT
-//        )
-//        constraint.layoutParams = params
-
-//
-
-
-//        val params = ConstraintLayout.LayoutParams(
-//            ConstraintLayout.LayoutParams.MATCH_PARENT,
-//            ConstraintLayout.LayoutParams.WRAP_CONTENT
-//        )
-//        params.setMargins(0, 20, 0, 40)
-//        params.height = 1
-//        params. width = 1
-//        constraint_layout_note.layoutParams = params
-
-        //apply the default width and height constraints in code
-//        val constraints = ConstraintSet()
-//        constraints.clone(parent)
-//        constraints.constrainDefaultHeight(view.id, ConstraintSet.MATCH_CONSTRAINT_SPREAD)
-//        constraints.constrainDefaultWidth(view.id, ConstraintSet.MATCH_CONSTRAINT_SPREAD)
-//        constraints.applyTo(parent)
-
-
-// -------------------------------------------------------------------------------------------------
-        return binding.root
-    }
-
-    private fun loadSettings() {
         val settingsManager: SharedPreferences = PreferenceManager
             .getDefaultSharedPreferences(context)
 
         val rows = settingsManager.getString("rows", "2")
         val columns = settingsManager.getString("columns", "2")
+        var defaultNoteTextSizeSettings = settingsManager.getString("defaultNoteTextSize", "45")
+        var defaultTitleTextSizeSettings = settingsManager.getString("defaultTitleTextSize", "45")
 
-        numberOfRows = rows!!.toInt()
-        numberOfColumns = columns!!.toInt()
+        if (defaultNoteTextSizeSettings == "") {
+            defaultNoteTextSizeSettings = "45"
+
+            Toast.makeText(
+                activity,
+                "The default text size value  shouldn't be empty." +
+                        "Standard size is used until you change it to a real value",
+                Toast.LENGTH_LONG
+            ).show()
+        }
+
+        if (defaultTitleTextSizeSettings == "") {
+            defaultTitleTextSizeSettings = "45"
+
+            Toast.makeText(
+                activity,
+                "Default text sizes shouldn't be empty." +
+                        "Standard size is used until you change it to a real value",
+                Toast.LENGTH_LONG
+            ).show()
+        }
+        val numberOfRows = rows!!.toInt()
+        val numberOfColumns = columns!!.toInt()
+        val defaultNoteTextSize = defaultNoteTextSizeSettings.toString().toFloat()
+        val defaultTitleTextSize = defaultTitleTextSizeSettings.toString().toFloat()
+
+        val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
+
+        val defaultBackgroundColor: Int = sharedPreferences
+            .getInt("defaultBackgroundColor", Color.parseColor("#FFFFFF"))
+        val defaultTextColor: Int = sharedPreferences
+            .getInt("defaultTextColor", Color.parseColor("#FFFFFF"))
+
+// -------------------------------------------------------------------------------------------------
+// Setting up Recyclerview in Gridlayout with LayoutManager-----------------------------------------
+
+        // For notes
+        val layoutManagerNotes = object : GridLayoutManager(
+            activity, numberOfRows, HORIZONTAL, false
+        ) {
+            override fun checkLayoutParams(layoutParams: RecyclerView.LayoutParams): Boolean {
+                layoutParams.width = width / numberOfColumns
+                return true
+            }
+        }
+        binding.recyclerViewNotes.layoutManager = layoutManagerNotes
+
+        // For titles
+        val layoutManagerTitles = object : GridLayoutManager(
+            activity, numberOfRows, HORIZONTAL, false
+        ) {
+            override fun checkLayoutParams(layoutParams: RecyclerView.LayoutParams): Boolean {
+                layoutParams.width = width / numberOfColumns
+                return true
+            }
+        }
+        binding.recyclerViewTitles.layoutManager = layoutManagerTitles
+
+// -------------------------------------------------------------------------------------------------
+// Instance of adapter that handles click on listItem and submit recyclerviews list-----------------
+
+        // Setting adapter for notes
+        val adapterNotes = NotesAdapter()
+        binding.recyclerViewNotes.adapter = adapterNotes
+
+        // Submitting the whole list of notes for the recyclerview
+        mainViewModel.allNotes.observe(viewLifecycleOwner, {
+            it?.let {
+                adapterNotes.submitList(it)
+            }
+        })
+
+        // Setting adapter for titles
+        val adapterTitles = TitlesAdapter()
+        binding.recyclerViewTitles.adapter = adapterTitles
+
+        // Submitting the whole list of titles for the recyclerview
+        mainViewModel.allNotes.observe(viewLifecycleOwner, Observer {
+            it?.let {
+                adapterTitles.submitList(it)
+            }
+        })
+
+        // Navigate to newFragment on item click
+        mainViewModel.navigateToNewFragment.observe(viewLifecycleOwner, { note ->
+            note?.let {
+                this.findNavController().navigate(
+                    MainFragmentDirections.actionMainFragmentToNewFragment(note.noteId)
+                )
+            }
+        })
+
+// -------------------------------------------------------------------------------------------------
+// Synchronize scrolling----------------------------------------------------------------------------
+
+        val scrollListeners = arrayOfNulls<RecyclerView.OnScrollListener>(2)
+        scrollListeners[0] =
+            object : RecyclerView.OnScrollListener() {
+                override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                    super.onScrolled(recyclerView, dx, dy)
+                    scrollListeners[1]?.let { binding.recyclerViewNotes.removeOnScrollListener(it) }
+                    binding.recyclerViewNotes.scrollBy(dx, dy)
+                    scrollListeners[1]?.let { binding.recyclerViewNotes.addOnScrollListener(it) }
+                }
+            }
+        scrollListeners[1] =
+            object : RecyclerView.OnScrollListener() {
+                override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                    super.onScrolled(recyclerView, dx, dy)
+                    scrollListeners[0]?.let { binding.recyclerViewTitles.removeOnScrollListener(it) }
+                    binding.recyclerViewTitles.scrollBy(dx, dy)
+                    scrollListeners[0]?.let { binding.recyclerViewTitles.addOnScrollListener(it) }
+                }
+            }
+
+        scrollListeners[0]?.let { binding.recyclerViewTitles.addOnScrollListener(it) }
+        scrollListeners[1]?.let { binding.recyclerViewNotes.addOnScrollListener(it) }
+
+// -------------------------------------------------------------------------------------------------
+// Buttons------------------------------------------------------------------------------------------
+
+        // Button - exit app
+        binding.buttonExit.setOnClickListener { activity?.finish() }
+
+        // Button - settings
+        binding.buttonSettings.setOnClickListener {
+            view?.findNavController()?.navigate(
+                MainFragmentDirections.actionMainFragmentToSettingsFragment()
+            )
+        }
+
+        // Button - new note
+        binding.buttonAdd.setOnClickListener {
+
+            mainViewModel.onAddNote(
+                noteEntryBackgroundColor = defaultBackgroundColor,
+                noteEntryTextColor = defaultTextColor,
+                noteEntryNoteSize = defaultNoteTextSize,
+                noteEntryTitleSize = defaultTitleTextSize
+            )
+
+            mainViewModel.navigateToSleepQuality.observe(viewLifecycleOwner, { note ->
+                note?.let {
+                    this.findNavController().navigate(
+                        MainFragmentDirections.actionMainFragmentToNewFragment(
+                            note.noteId
+                        )
+                    )
+                }
+            })
+
+            mainViewModel.newestNote.value = null
+        }
+
+// -------------------------------------------------------------------------------------------------
+
+// -------------------------------------------------------------------------------------------------
+        return binding.root
     }
 }
 

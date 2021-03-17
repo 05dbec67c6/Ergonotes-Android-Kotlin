@@ -9,14 +9,14 @@
     <fragment
         android:id="@+id/mainFragment"
         android:name="com.ergonotes.fragments.MainFragment"
-        android:label="MainFragment"
+        android:label="mainFragment"
         tools:layout="@layout/fragment_main">
         <action
             android:id="@+id/action_mainFragment_to_newFragment"
             app:destination="@id/newFragment" />
         <action
             android:id="@+id/action_mainFragment_to_dialogFragment"
-            app:destination="@id/DialogFragment" />
+            app:destination="@id/dialogFragment" />
         <argument
             android:name="noteEntryKey"
             android:defaultValue="-1L"
@@ -32,7 +32,7 @@
     <fragment
         android:id="@+id/newFragment"
         android:name="com.ergonotes.fragments.NewFragment"
-        android:label="NewFragment"
+        android:label="newFragment"
         tools:layout="@layout/fragment_new">
         <argument
             android:name="noteEntryKey"
@@ -44,9 +44,9 @@
 
     </fragment>
     <fragment
-        android:id="@+id/DialogFragment"
+        android:id="@+id/dialogFragment"
         android:name="com.ergonotes.fragments.DialogDeleteFragment"
-        android:label="DialogFragment"
+        android:label="dialogFragment"
         tools:layout="@layout/fragment_dialog_delete">
         <action
             android:id="@+id/action_dialogFragment_to_mainFragment"
@@ -59,7 +59,7 @@
     <fragment
         android:id="@+id/settingsFragment"
         android:name="com.ergonotes.fragments.SettingsFragment"
-        android:label="SettingsFragment" >
+        android:label="settingsFragment">
         <action
             android:id="@+id/action_settingsFragment_to_mainFragment"
             app:destination="@id/mainFragment" />
@@ -67,12 +67,12 @@
     <fragment
         android:id="@+id/editFragment"
         android:name="com.ergonotes.fragments.EditFragment"
-        android:label="fragment_edit"
-        tools:layout="@layout/fragment_edit" >
+        android:label="editFragment"
+        tools:layout="@layout/fragment_edit">
         <argument
             android:name="noteEntryKey"
-            app:argType="long"
-            android:defaultValue="-1L" />
+            android:defaultValue="-1L"
+            app:argType="long" />
         <action
             android:id="@+id/action_editFragment_to_mainFragment"
             app:destination="@id/mainFragment" />

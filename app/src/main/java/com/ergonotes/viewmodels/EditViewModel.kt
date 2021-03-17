@@ -1,5 +1,6 @@
 package com.ergonotes.viewmodels
 
+import android.graphics.Color
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -8,58 +9,51 @@ import com.ergonotes.database.NoteEntry
 import com.ergonotes.database.NoteEntryDao
 import kotlinx.coroutines.launch
 
-class NewFragmentViewModel(
+class EditViewModel(
     private val noteEntryKey: Long = 0L,
-    private val dataSource: NoteEntryDao
+    private val dataBase: NoteEntryDao
 ) : ViewModel() {
 
 // -------------------------------------------------------------------------------------------------
 // Set and initialize-------------------------------------------------------------------------------
 
-    private val note: LiveData<NoteEntry> = dataSource.getNoteWithId(noteEntryKey)
+    private val note: LiveData<NoteEntry> = dataBase.getNoteWithId(noteEntryKey)
     fun getNote() = note
+
 
     private var newestNote = MutableLiveData<NoteEntry?>()
     private suspend fun insertNewNote(note: NoteEntry) {
-        dataSource.insertNewNote(note)
+        dataBase.insertNewNote(note)
     }
     private suspend fun getLatestNoteFromDatabase(): NoteEntry? {
-        return dataSource.getLatestNoteFromDatabase()
-    }
-    fun onPressNewNote() {
-        viewModelScope.launch {
-
-            // Variable of databases entity
-            val newNote = NoteEntry()
-
-            insertNewNote(newNote)
-
-            // Set the values of the NoteEntry entity
-            newestNote.value = getLatestNoteFromDatabase()
-        }
+        return dataBase.getLatestNoteFromDatabase()
     }
 
+    val allNotes = dataBase.getAllNotes()
 // -------------------------------------------------------------------------------------------------
 // Button apply update database --------------------------------------------------------------------
 
-    fun onSetNote(titleString: String, noteString: String) {
+    fun onSetNote(backgroundColor: Int, textColor: Int, noteTextSize: Float, titleTextSize: Float) {
         viewModelScope.launch {
-            val note = dataSource.getTargetNote(noteEntryKey)
-            note.noteEntryTitle = titleString
-            note.noteEntryNote = noteString
-            dataSource.updateNote(note)
+            val note = dataBase.getTargetNote(noteEntryKey)
+            note.noteEntryBackgroundColor = backgroundColor
+            note.noteEntryTextColor = textColor
+            note.noteEntryNoteTextSize = noteTextSize
+            note.noteEntryTitleTextSize = titleTextSize
+            dataBase.updateNote(note)
         }
     }
+
 
     // -------------------------------------------------------------------------------------------------
 // Button update database --------------------------------------------------------------------------
     private suspend fun deleteTargetNote(note: NoteEntry) {
-        dataSource.deleteTargetNote(note)
+        dataBase.deleteTargetNote(note)
     }
 
     fun deleteTargetNote() {
         viewModelScope.launch {
-            val note = dataSource.getTargetNote(noteEntryKey)
+            val note = dataBase.getTargetNote(noteEntryKey)
             deleteTargetNote(note)
         }
     }
@@ -71,6 +65,10 @@ class NewFragmentViewModel(
     fun onNoteClicked(id: Long) {
         _navigateToNewFragment.value = id
     }
+
+
+
+
 }
 
 

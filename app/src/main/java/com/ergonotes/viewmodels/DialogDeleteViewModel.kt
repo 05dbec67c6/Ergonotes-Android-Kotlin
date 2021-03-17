@@ -7,7 +7,7 @@ import com.ergonotes.database.NoteEntry
 import com.ergonotes.database.NoteEntryDao
 import kotlinx.coroutines.launch
 
-class DialogDeleteFragmentViewModel(
+class DialogDeleteViewModel(
     private val noteEntryKey: Long = 0L,
     private val dataSource: NoteEntryDao
 ) : ViewModel() {

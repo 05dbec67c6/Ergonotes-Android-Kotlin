@@ -1,4 +1,4 @@
-package com.ergonotes.views
+package com.ergonotes.adapter
 
 import android.view.*
 import androidx.navigation.findNavController
@@ -8,7 +8,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.ergonotes.database.NoteEntry
 import com.ergonotes.databinding.ListItemTitleBinding
 import com.ergonotes.fragments.MainFragmentDirections
-
 
 class TitlesAdapter : ListAdapter<NoteEntry, RecyclerView.ViewHolder>(TitlesDiffCallback()) {
 
