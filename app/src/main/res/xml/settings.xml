@@ -5,6 +5,11 @@
         app:icon="@drawable/ic_baseline_settings_24"
         app:title="@string/look_header">
 
+        <com.ergonotes.BackgroundColorPreference
+            android:id="@+id/background_color"
+            app:key="defaultTextColor"
+            app:layout="@layout/custom_setting_background_color" />
+
         <ListPreference
             android:id="@+id/rows"
             android:defaultValue="true"
@@ -32,6 +37,16 @@
         app:icon="@drawable/ic_baseline_settings_24"
         app:title="@string/default_values_header">
 
+        <com.ergonotes.DefaultColorBackgroundPreference
+            android:id="@+id/default_background_color"
+            app:key="defaultBackgroundColor"
+            app:layout="@layout/custom_setting_default_background_color" />
+
+        <com.ergonotes.DefaultColorTextPreference
+            android:id="@+id/default_text_color"
+            app:key="defaultTextColor"
+            app:layout="@layout/custom_setting_default_text_color" />
+
         <EditTextPreference
             android:id="@+id/note_text_size"
             android:defaultValue="45"
@@ -49,16 +64,6 @@
             android:singleLine="true"
             android:title="@string/default_title_text_size"
             app:useSimpleSummaryProvider="true" />
-
-        <com.ergonotes.DefaultColorBackgroundPreference
-            android:id="@+id/background_color"
-            app:key="defaultBackgroundColor"
-            app:layout="@layout/custom_setting_default_background_color" />
-
-        <com.ergonotes.DefaultColorTextPreference
-            android:id="@+id/text_color"
-            app:key="defaultTextColor"
-            app:layout="@layout/custom_setting_default_text_color" />
 
     </PreferenceCategory>
 

@@ -24,8 +24,8 @@
     <!-- Buttontexts -->
     <string name="button_text_preview_note_text_size">Preview note text size</string>
     <string name="button_text_preview_title_text_size">Preview title text size</string>
-    <string name="button_text_change_background_color">Change background color</string>
-    <string name="button_text_change_text_color">Change text color</string>
+    <string name="button_text_change_background_color">Preview background</string>
+    <string name="button_text_change_text_color">Preview text color</string>
     <string name="button_text_cancel_edit_fragment">Cancel</string>
     <string name="button_text_save_and_go_back">Save and go back</string>
 

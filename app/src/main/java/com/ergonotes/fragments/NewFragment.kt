@@ -1,21 +1,24 @@
 package com.ergonotes.fragments
 
+import android.app.Activity
+import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
+import androidx.preference.PreferenceManager
 import com.ergonotes.R
 import com.ergonotes.database.NoteDatabase
 import com.ergonotes.databinding.FragmentNewBinding
 import com.ergonotes.viewmodelfactories.NewViewModelFactory
 import com.ergonotes.viewmodels.NewViewModel
+import kotlinx.android.synthetic.main.fragment_new.*
 
 class NewFragment : Fragment() {
 
@@ -99,7 +102,7 @@ class NewFragment : Fragment() {
             }
         }
 
-         //Button - Apply, toast and go back
+        //Button - Apply, toast and go back
         binding.buttonApplyAndGoToMain.setOnClickListener {
 
             newFragmentViewModel.onSetNote(
@@ -146,7 +149,7 @@ class NewFragment : Fragment() {
 //
 //        super.onViewCreated(view, savedInstanceState)
 
-        val text = newFragmentViewModel.getNote()
+        //  val text = newFragmentViewModel.getNote()
 
 //        val noteTextListener: LiveData<NoteEntry> = newFragmentViewModel.getNote()
 //        noteTextListener.observe(
@@ -158,26 +161,43 @@ class NewFragment : Fragment() {
 //                }
 //            })
 
-        binding.editTextNote.requestFocus()
-        binding.editTextNote.setSelection(binding.editTextNote.length())
+        binding.editTextTitle.requestFocus()
+        binding.editTextTitle.setSelection(binding.editTextTitle.length())
+
+
+        val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
+
+        val backgroundColor: Int = sharedPreferences
+            .getInt("backgroundColor", Color.parseColor("#FFFFC8"))
+
+        binding.constraintLayoutNewFragment.setBackgroundColor(backgroundColor)
+
+binding.editTextTitle.isFocusable=true
+        binding.editTextTitle.isFocusableInTouchMode=true
+        binding.editTextTitle.requestFocus()
+
+
+
+
 
         return binding.root
     }
+}
 
 
-    override fun onResume() {
-        super.onResume()
 
+
+//editText_note.setSelection(editText_note.length())
 
 //binding
 //        if (binding != null) {
 //            binding.editTextNote.requestFocus()
 //        }
 //        if (binding != null) {
-//            binding.editTextNote.setSelection(binding.editTextNote.length())
+//            binding.
 //        }
 //    }
-    }
-}
+
+
 
 

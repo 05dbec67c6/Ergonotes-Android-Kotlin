@@ -1,5 +1,6 @@
 package com.ergonotes.fragments
 
+import android.annotation.SuppressLint
 import android.content.SharedPreferences
 import android.graphics.Color
 import android.os.Bundle
@@ -24,9 +25,11 @@ import com.ergonotes.databinding.FragmentMainBinding
 import com.ergonotes.viewmodelfactories.MainViewModelFactory
 import com.ergonotes.viewmodels.MainViewModel
 
+
 class MainFragment : Fragment() {
 
 
+    @SuppressLint("ClickableViewAccessibility")
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -64,8 +67,10 @@ class MainFragment : Fragment() {
 
         val rows = settingsManager.getString("rows", "2")
         val columns = settingsManager.getString("columns", "2")
-        var defaultNoteTextSizeSettings = settingsManager.getString("defaultNoteTextSize", "45")
-        var defaultTitleTextSizeSettings = settingsManager.getString("defaultTitleTextSize", "45")
+        var defaultNoteTextSizeSettings = settingsManager
+            .getString("defaultNoteTextSize", "45")
+        var defaultTitleTextSizeSettings = settingsManager
+            .getString("defaultTitleTextSize", "45")
 
         if (defaultNoteTextSizeSettings == "") {
             defaultNoteTextSizeSettings = "45"
@@ -96,9 +101,17 @@ class MainFragment : Fragment() {
         val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
 
         val defaultBackgroundColor: Int = sharedPreferences
-            .getInt("defaultBackgroundColor", Color.parseColor("#FFFFFF"))
+            .getInt("defaultBackgroundColor", Color.parseColor("#B4B4B4"))
+
         val defaultTextColor: Int = sharedPreferences
-            .getInt("defaultTextColor", Color.parseColor("#FFFFFF"))
+            .getInt("defaultTextColor", Color.parseColor("#000000"))
+
+        val backgroundColor: Int = sharedPreferences
+            .getInt("backgroundColor", Color.parseColor("#DFDFDF"))
+
+        binding.recyclerViewTitles.setBackgroundColor(backgroundColor)
+        binding.recyclerViewNotes.setBackgroundColor(backgroundColor)
+        binding.mainConstraintLayout.setBackgroundColor(backgroundColor)
 
 // -------------------------------------------------------------------------------------------------
 // Setting up Recyclerview in Gridlayout with LayoutManager-----------------------------------------
@@ -222,6 +235,7 @@ class MainFragment : Fragment() {
         }
 
 // -------------------------------------------------------------------------------------------------
+
 
 // -------------------------------------------------------------------------------------------------
         return binding.root

@@ -18,10 +18,10 @@ data class NoteEntry(
     var noteEntryNote: String = "dummy_note",
 
     @ColumnInfo(name = "note_entry_background_color")
-    var noteEntryBackgroundColor: Int = Color.parseColor("#000000"),
+    var noteEntryBackgroundColor: Int,
 
     @ColumnInfo(name = "note_entry_text_color")
-    var noteEntryTextColor: Int = Color.parseColor("#FFFFFF"),
+    var noteEntryTextColor: Int,
 
     @ColumnInfo(name = "note_entry_note_text_size")
     var noteEntryNoteTextSize: Float = 45F,
