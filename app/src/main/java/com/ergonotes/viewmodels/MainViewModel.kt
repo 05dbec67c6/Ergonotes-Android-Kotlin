@@ -1,6 +1,5 @@
 package com.ergonotes.viewmodels
 
-import android.graphics.Color
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -16,55 +15,44 @@ class MainViewModel(
 ) :
     ViewModel() {
 
-    // Variable of the noteKeys in DAO for navigating
-    var newestNote = MutableLiveData<NoteEntry?>()
+    val allNotes = dataSource.getAllNotes()
 
-    val allNotes2 = dataSource.getAllNotes()
-
-    private val _navigateToNewFragment = MutableLiveData<NoteEntry>()
-
-
-    val navigateToNewFragment: LiveData<NoteEntry>
-        get() = _navigateToNewFragment
-    private val _navigateToSleepDataQuality = MutableLiveData<Long>()
-    private val _navigateToNewFragmentNew = MutableLiveData<Long>()
-    val navigateToSleepDataQuality
-        get() = _navigateToSleepDataQuality
-    val navigateToNewFragmentNew
-        get() = _navigateToNewFragmentNew
-
-    fun onSleepNightClicked(id: Long) {
-        _navigateToSleepDataQuality.value = id
-    }
-
+    private val _navigateToNewNote = MutableLiveData<NoteEntry>()
+    val navigateToNewNote: LiveData<NoteEntry>
+        get() = _navigateToNewNote
 
 // -------------------------------------------------------------------------------------------------
-// General Variables--------------------------------------------------------------------------------
+// Initializing the list----------------------------------------------------------------------------
 
-    // Set notes as liveData
-
-
-// -------------------------------------------------------------------------------------------------
-// Button add note----------------------------------------------------------------------------------
-
-    // DAO-Function - Insert a new entry in the database
-    private suspend fun insertNewNote(note: NoteEntry) {
-        dataSource.insertNewNote(note)
+    private suspend fun getLatestNoteFromDatabase(): NoteEntry? {
+        return dataSource.getLatestNoteFromDatabase()
     }
-
-    private val _navigateToSleepQuality = MutableLiveData<NoteEntry>()
-
-    val navigateToSleepQuality: LiveData<NoteEntry>
-        get() = _navigateToSleepQuality
 
     private var thisNote = MutableLiveData<NoteEntry?>()
 
-    private fun initializeTonight() {
+    private fun initializeNote() {
         viewModelScope.launch {
             thisNote.value = getLatestNoteFromDatabase()
         }
     }
-    // Create new note
+
+    init {
+        initializeNote()
+    }
+
+// -------------------------------------------------------------------------------------------------
+// Create new note and navigate to it---------------------------------------------------------------
+
+    private val _navigateToNewFragment = MutableLiveData<NoteEntry>()
+    val navigateToNewFragment: LiveData<NoteEntry>
+        get() = _navigateToNewFragment
+
+    private suspend fun insertNewNote(note: NoteEntry) {
+        withContext(Dispatchers.IO) {
+            dataSource.insertNewNote(note)
+        }
+    }
+
     fun onAddNote(
         noteEntryBackgroundColor: Int,
         noteEntryTextColor: Int,
@@ -72,9 +60,8 @@ class MainViewModel(
         noteEntryTitleSize: Float
     ) {
         viewModelScope.launch {
-            // Create a new night, which captures the current time,
-            // and insert it into the database.
-            val newNight = NoteEntry(
+
+            val newNote = NoteEntry(
                 noteEntryTitle = "",
                 noteEntryNote = "",
                 noteEntryBackgroundColor = noteEntryBackgroundColor.toString().toInt(),
@@ -83,67 +70,11 @@ class MainViewModel(
                 noteEntryTitleTextSize = noteEntryTitleSize
             )
 
-            insertNewNote(newNight)
+            insertNewNote(newNote)
 
-            newestNote.value = getLatestNoteFromDatabase()
+            _navigateToNewFragment.value = getLatestNoteFromDatabase()
 
-            val oldNight = newestNote.value
-//
-//            update(oldNight)
-
-            _navigateToSleepQuality.value = oldNight
         }
     }
-    private suspend fun update(night: NoteEntry) {
-        withContext(Dispatchers.IO) {
-            dataSource.updateNote(night)
-        }
-    }
-
-    fun onClear() {
-        viewModelScope.launch {
-            // Clear the database table.
-            clear()
-        }
-    }
-
-    fun onNewNoteClicke2d(id: Long) {
-        _navigateToNewFragmentNew.value = id
-    }
-
-    private suspend fun clear() {
-        withContext(Dispatchers.IO) {
-            dataSource.clearDatabase()
-        }
-    }
-// -------------------------------------------------------------------------------------------------
-// RecyclerView - Submitting the whole list of notes -----------------------------------------------
-
-    // DAO - Variable - Get a list of all the notes
-    val allNotes = dataSource.getAllNotes()
-
-// -------------------------------------------------------------------------------------------------
-// Initializing the list----------------------------------------------------------------------------
-
-    // Get latest note from database in DAO
-    private suspend fun getLatestNoteFromDatabase(): NoteEntry? {
-        return dataSource.getLatestNoteFromDatabase()
-    }
-
-    private fun initializeNotes() {
-        viewModelScope.launch {
-            newestNote.value = getLatestNoteFromDatabase()
-        }
-    }
-
-    init {
-        //initializeNotes()
-        initializeTonight()
-    }
-
-    fun changeDefaultBackgroundColor(){
-
-    }
-
 }
 

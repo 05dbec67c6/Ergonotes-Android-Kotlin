@@ -13,7 +13,7 @@ abstract class NoteDatabase : RoomDatabase() {
     // Companion object, because no instance of the class is needed
     companion object {
 
-        //Volatile means, it will never get cached
+        // Volatile means, it will never get cached
         @Volatile
         private var INSTANCE: NoteDatabase? = null
 

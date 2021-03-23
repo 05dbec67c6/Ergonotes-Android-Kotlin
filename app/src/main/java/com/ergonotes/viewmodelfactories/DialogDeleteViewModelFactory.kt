@@ -6,8 +6,10 @@ import com.ergonotes.database.NoteEntryDao
 import com.ergonotes.viewmodels.DialogDeleteViewModel
 
 class DialogDeleteViewModelFactory(
+
     private val noteEntryKey: Long,
     private val dataSource: NoteEntryDao
+
 ) : ViewModelProvider.Factory {
     @Suppress("unchecked_cast")
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {

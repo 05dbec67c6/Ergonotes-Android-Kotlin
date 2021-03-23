@@ -31,12 +31,9 @@
             android:layout_marginBottom="1dp"
             android:autofillHints="@string/autoFillHint_title"
             android:background="@{newFragmentViewModel.note.noteEntryBackgroundColor}"
-
-
             android:gravity="center"
             android:hint="@string/hint_editText_title"
             android:inputType="text"
-            android:text="@{newFragmentViewModel.note.noteEntryTitle}"
             android:textColor="@{newFragmentViewModel.note.noteEntryTextColor}"
             android:textSize="@{newFragmentViewModel.note.noteEntryTitleTextSize}"
             android:textStyle="bold"
@@ -52,14 +49,13 @@
             android:layout_marginBottom="1dp"
             android:autofillHints="@string/autoFillHint_note"
             android:background="@{newFragmentViewModel.note.noteEntryBackgroundColor}"
-
             android:gravity="top|start"
-
             android:hint="@string/hint_editText_note"
             android:inputType="textMultiLine"
             android:labelFor="@string/label_editText_note"
             android:tag="note_content"
-            android:text="@{newFragmentViewModel.note.noteEntryNote}"
+
+
             android:textColor="@{newFragmentViewModel.note.noteEntryTextColor}"
             android:textSize="@{newFragmentViewModel.note.noteEntryNoteTextSize}"
             app:layout_constraintBottom_toTopOf="@id/button_apply_and_go_to_main"

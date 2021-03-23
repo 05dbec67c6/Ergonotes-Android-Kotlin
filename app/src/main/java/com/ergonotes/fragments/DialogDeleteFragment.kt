@@ -30,7 +30,7 @@ class DialogDeleteFragment : Fragment() {
         )
 
 // -------------------------------------------------------------------------------------------------
-// Application, arguments, and dataSource for viewModel/Factory-------------------------------------
+// Application, arguments, binding and dataSource for viewModel/factory-----------------------------
 
         val application: Application = requireNotNull(this.activity).application
 

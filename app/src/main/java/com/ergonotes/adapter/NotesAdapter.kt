@@ -26,6 +26,7 @@ class NotesAdapter : ListAdapter<NoteEntry, RecyclerView.ViewHolder>(NotesDiffCa
     }
 }
 
+
 class NotesViewHolder(
     private val binding: ListItemNoteBinding
 ) : RecyclerView.ViewHolder(binding.root) {
@@ -48,4 +49,3 @@ private class NotesDiffCallback : DiffUtil.ItemCallback<NoteEntry>() {
         return oldItem == newItem
     }
 }
-

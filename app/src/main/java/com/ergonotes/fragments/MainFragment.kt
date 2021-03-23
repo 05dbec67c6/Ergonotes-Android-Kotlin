@@ -1,6 +1,5 @@
 package com.ergonotes.fragments
 
-import android.annotation.SuppressLint
 import android.content.SharedPreferences
 import android.graphics.Color
 import android.os.Bundle
@@ -10,12 +9,12 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.ergonotes.R
 import com.ergonotes.adapter.NotesAdapter
@@ -25,11 +24,10 @@ import com.ergonotes.databinding.FragmentMainBinding
 import com.ergonotes.viewmodelfactories.MainViewModelFactory
 import com.ergonotes.viewmodels.MainViewModel
 
-
 class MainFragment : Fragment() {
 
+    var touchHelper: ItemTouchHelper? = null
 
-    @SuppressLint("ClickableViewAccessibility")
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -43,7 +41,7 @@ class MainFragment : Fragment() {
         )
 
 // -------------------------------------------------------------------------------------------------
-// Application, arguments, and dataSource for viewModel/Factory-------------------------------------
+// Application, arguments, databinding and dataSource for viewModel/Factory-------------------------
 
         val application = requireNotNull(this.activity).application
 
@@ -61,14 +59,16 @@ class MainFragment : Fragment() {
 // -------------------------------------------------------------------------------------------------
 // Load settings------------------------------------------------------------------------------------
 
-
         val settingsManager: SharedPreferences = PreferenceManager
             .getDefaultSharedPreferences(context)
 
         val rows = settingsManager.getString("rows", "2")
+
         val columns = settingsManager.getString("columns", "2")
+
         var defaultNoteTextSizeSettings = settingsManager
             .getString("defaultNoteTextSize", "45")
+
         var defaultTitleTextSizeSettings = settingsManager
             .getString("defaultTitleTextSize", "45")
 
@@ -93,9 +93,13 @@ class MainFragment : Fragment() {
                 Toast.LENGTH_LONG
             ).show()
         }
+
         val numberOfRows = rows!!.toInt()
+
         val numberOfColumns = columns!!.toInt()
+
         val defaultNoteTextSize = defaultNoteTextSizeSettings.toString().toFloat()
+
         val defaultTitleTextSize = defaultTitleTextSizeSettings.toString().toFloat()
 
         val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
@@ -157,20 +161,22 @@ class MainFragment : Fragment() {
         binding.recyclerViewTitles.adapter = adapterTitles
 
         // Submitting the whole list of titles for the recyclerview
-        mainViewModel.allNotes.observe(viewLifecycleOwner, Observer {
-            it?.let {
-                adapterTitles.submitList(it)
-            }
-        })
+        mainViewModel.allNotes.observe(viewLifecycleOwner,
+            {
+                it?.let {
+                    adapterTitles.submitList(it)
+                }
+            })
 
-        // Navigate to newFragment on item click
-        mainViewModel.navigateToNewFragment.observe(viewLifecycleOwner, { note ->
-            note?.let {
-                this.findNavController().navigate(
-                    MainFragmentDirections.actionMainFragmentToNewFragment(note.noteId)
-                )
-            }
-        })
+// Navigate to newFragment on item click
+        mainViewModel.navigateToNewFragment.observe(viewLifecycleOwner,
+            { note ->
+                note?.let {
+                    this.findNavController().navigate(
+                        MainFragmentDirections.actionMainFragmentToNewFragment(note.noteId)
+                    )
+                }
+            })
 
 // -------------------------------------------------------------------------------------------------
 // Synchronize scrolling----------------------------------------------------------------------------
@@ -201,17 +207,10 @@ class MainFragment : Fragment() {
 // -------------------------------------------------------------------------------------------------
 // Buttons------------------------------------------------------------------------------------------
 
-        // Button - exit app
+// Button - exit app
         binding.buttonExit.setOnClickListener { activity?.finish() }
 
-        // Button - settings
-        binding.buttonSettings.setOnClickListener {
-            view?.findNavController()?.navigate(
-                MainFragmentDirections.actionMainFragmentToSettingsFragment()
-            )
-        }
-
-        // Button - new note
+// Button - new note with default values
         binding.buttonAdd.setOnClickListener {
 
             mainViewModel.onAddNote(
@@ -221,7 +220,7 @@ class MainFragment : Fragment() {
                 noteEntryTitleSize = defaultTitleTextSize
             )
 
-            mainViewModel.navigateToSleepQuality.observe(viewLifecycleOwner, { note ->
+            mainViewModel.navigateToNewNote.observe(viewLifecycleOwner, { note ->
                 note?.let {
                     this.findNavController().navigate(
                         MainFragmentDirections.actionMainFragmentToNewFragment(
@@ -230,10 +229,14 @@ class MainFragment : Fragment() {
                     )
                 }
             })
-
-            mainViewModel.newestNote.value = null
         }
 
+// Button - settings
+        binding.buttonSettings.setOnClickListener {
+            view?.findNavController()?.navigate(
+                MainFragmentDirections.actionMainFragmentToSettingsFragment()
+            )
+        }
 // -------------------------------------------------------------------------------------------------
 
 
@@ -241,6 +244,3 @@ class MainFragment : Fragment() {
         return binding.root
     }
 }
-
-
-

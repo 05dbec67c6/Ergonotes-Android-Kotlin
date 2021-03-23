@@ -28,7 +28,10 @@ class TitlesAdapter : ListAdapter<NoteEntry, RecyclerView.ViewHolder>(TitlesDiff
 }
 
 class TitlesViewHolder(private val binding: ListItemTitleBinding) :
-    RecyclerView.ViewHolder(binding.root), View.OnClickListener,
+    RecyclerView.ViewHolder(binding.root),
+
+    // clicklistener and contextmenu
+    View.OnClickListener,
     View.OnCreateContextMenuListener {
 
     fun bind(item: NoteEntry) {
@@ -77,8 +80,8 @@ class TitlesViewHolder(private val binding: ListItemTitleBinding) :
 }
 
 private fun navigateToNoteEntry(note: NoteEntry, view: View) {
-    val direction = MainFragmentDirections.actionMainFragmentToNewFragment(note.noteId)
-    view.findNavController().navigate(direction)
+    val directionToNewFragment = MainFragmentDirections.actionMainFragmentToNewFragment(note.noteId)
+    view.findNavController().navigate(directionToNewFragment)
 }
 
 private fun navigateToDelete(note: NoteEntry, view: View) {
@@ -101,5 +104,3 @@ private class TitlesDiffCallback : DiffUtil.ItemCallback<NoteEntry>() {
         return oldItem == newItem
     }
 }
-
-

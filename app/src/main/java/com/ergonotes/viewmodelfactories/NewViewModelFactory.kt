@@ -7,9 +7,11 @@ import com.ergonotes.database.NoteEntryDao
 import com.ergonotes.viewmodels.NewViewModel
 
 class NewViewModelFactory(
+
     private val noteEntryKey: Long,
     private val dataSource: NoteEntryDao,
     private val application: Application
+
 ) : ViewModelProvider.Factory {
     @Suppress("unchecked_cast")
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {

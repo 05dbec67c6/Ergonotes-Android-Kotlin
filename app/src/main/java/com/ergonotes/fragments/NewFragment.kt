@@ -1,58 +1,54 @@
 package com.ergonotes.fragments
 
-import android.app.Activity
+import android.content.Context
 import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
-import androidx.navigation.fragment.findNavController
 import androidx.preference.PreferenceManager
 import com.ergonotes.R
 import com.ergonotes.database.NoteDatabase
 import com.ergonotes.databinding.FragmentNewBinding
 import com.ergonotes.viewmodelfactories.NewViewModelFactory
 import com.ergonotes.viewmodels.NewViewModel
-import kotlinx.android.synthetic.main.fragment_new.*
 
 class NewFragment : Fragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
+
+// -------------------------------------------------------------------------------------------------
+// Databinding, application and args----------------------------------------------------------------
 
         val binding: FragmentNewBinding = DataBindingUtil.inflate(
             inflater, R.layout.fragment_new, container, false
         )
 
+// -------------------------------------------------------------------------------------------------
+// Application, arguments, databinding and dataSource for viewModel/Factory-------------------------
+
         val application = requireNotNull(this.activity).application
 
-        // Arguments from MainFragment
         val arguments = NewFragmentArgs.fromBundle(requireArguments())
 
-// -------------------------------------------------------------------------------------------------
-// Setting up ViewModel and Factory-----------------------------------------------------------------
-
-        // Create an instance of the ViewModel Factory
         val dataSource = NoteDatabase.getDatabase(application).noteDatabaseDao
+
         val viewModelFactory =
             NewViewModelFactory(arguments.noteEntryKey, dataSource, application)
 
-        // Associate ViewModel with this Fragment
-        val newFragmentViewModel = ViewModelProvider(this, viewModelFactory)
+        val newViewModel = ViewModelProvider(this, viewModelFactory)
             .get(NewViewModel::class.java)
 
-        // Use View Model with data binding
-        binding.newFragmentViewModel = newFragmentViewModel
-
-// -------------------------------------------------------------------------------------------------
-// Setting current activity as lifecycle owner of the binding for LiveData--------------------------
+        binding.newFragmentViewModel = newViewModel
 
         binding.lifecycleOwner = this
 
@@ -66,7 +62,7 @@ class NewFragment : Fragment() {
             )
         }
 
-        // Button - Delete editText and/or whole note
+        // Button - Delete editText and/or whole notes text
         binding.buttonDelete.setOnClickListener {
             when {
                 binding.editTextTitle.hasFocus() && binding.editTextTitle.text.toString() != ""
@@ -76,16 +72,6 @@ class NewFragment : Fragment() {
                 -> binding.editTextNote.setText("")
             }
         }
-
-        newFragmentViewModel.navigateToSleepTracker.observe(viewLifecycleOwner, Observer {
-            if (it == true) { // Observed state is true.
-                this.findNavController().navigate(
-                    NewFragmentDirections.actionNewFragmentToMainFragment()
-                )
-                // Reset state to make sure we only navigate once, even if the device
-                // has a configuration change.
-            }
-        })
 
         // Button - Toggle focus between title and note
         binding.buttonToggleFocus.setOnClickListener {
@@ -102,68 +88,23 @@ class NewFragment : Fragment() {
             }
         }
 
-        //Button - Apply, toast and go back
+        //Button - Apply and go back
         binding.buttonApplyAndGoToMain.setOnClickListener {
 
-            newFragmentViewModel.onSetNote(
+            newViewModel.onSetNote(
                 titleString = binding.editTextTitle.text.toString(),
                 noteString = binding.editTextNote.text.toString(),
-            )
+
+                )
+            Toast.makeText(activity, "Note saved", Toast.LENGTH_SHORT).show()
 
             view?.findNavController()?.navigate(
                 NewFragmentDirections.actionNewFragmentToMainFragment()
             )
         }
-//        newFragmentViewModel.navigateToSleepTracker.observe(
-//            viewLifecycleOwner, Observer {
-//                if (it == true) { // Observed state is true.
-//                    this.findNavController().navigate(
-//                        NewFragmentDirections.actionNewFragmentToMainFragment()
-//                    )
-//                    // Reset state to make sure we only navigate once, even if the device
-//                    // has a configuration change.
-//                }
-//            })
 
 // -------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------
-// -------------------------------------------------------------------------------------------------
-// Experimental here, later XML---------------------------------------------------------------------
-
-
-//        val noteTextSizeListener: LiveData<NoteEntry> = newFragmentViewModel.getNote()
-//        noteTextSizeListener.observe(
-//            viewLifecycleOwner,
-//            Observer<NoteEntry> { note: NoteEntry? ->
-//
-//                if (note != null) {
-//                    binding.editTextNote.setText(note.noteEntryNote)
-//                }
-//            })
-
-
-        //automatically show inputmethod
-//        val inputMethodManager = requireActivity()
-//            .getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-//        inputMethodManager.showSoftInput(view.findFocus(), InputMethodManager.SHOW_IMPLICIT)
-//
-//        super.onViewCreated(view, savedInstanceState)
-
-        //  val text = newFragmentViewModel.getNote()
-
-//        val noteTextListener: LiveData<NoteEntry> = newFragmentViewModel.getNote()
-//        noteTextListener.observe(
-//            viewLifecycleOwner,
-//            Observer<NoteEntry> { note: NoteEntry? ->
-//
-//                if (note != null) {
-//                    binding.editTextNote.setText(note.noteEntryNote)
-//                }
-//            })
-
-        binding.editTextTitle.requestFocus()
-        binding.editTextTitle.setSelection(binding.editTextTitle.length())
-
+// Retrieve background color from Settings----------------------------------------------------------
 
         val sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
 
@@ -172,32 +113,30 @@ class NewFragment : Fragment() {
 
         binding.constraintLayoutNewFragment.setBackgroundColor(backgroundColor)
 
-binding.editTextTitle.isFocusable=true
-        binding.editTextTitle.isFocusableInTouchMode=true
-        binding.editTextTitle.requestFocus()
+// -------------------------------------------------------------------------------------------------
+// Set focus, set cursor to end of line and show keyboard-------------------------------------------
 
+        newViewModel.getNote().observe(viewLifecycleOwner, {
+            it?.let {
 
+                binding.editTextNote.setText(it.noteEntryNote)
+                binding.editTextTitle.setText(it.noteEntryTitle)
 
-
-
+                if (binding.editTextTitle.text.toString().isEmpty()) {
+                    binding.editTextTitle.requestFocus()
+                } else {
+                    binding.editTextNote.requestFocus()
+                    binding.editTextNote.setSelection(binding.editTextNote.length())
+                }
+                binding.editTextNote.showKeyboard()
+            }
+        })
+// -------------------------------------------------------------------------------------------------
         return binding.root
     }
 }
 
-
-
-
-//editText_note.setSelection(editText_note.length())
-
-//binding
-//        if (binding != null) {
-//            binding.editTextNote.requestFocus()
-//        }
-//        if (binding != null) {
-//            binding.
-//        }
-//    }
-
-
-
-
+private fun View.showKeyboard() {
+    val imm = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+    imm.toggleSoftInput(InputMethodManager.SHOW_IMPLICIT, 0)
+}

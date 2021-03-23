@@ -36,7 +36,7 @@ class EditFragment : Fragment() {
         )
 
 // -------------------------------------------------------------------------------------------------
-// Application, arguments, and dataSource for viewModel/Factory-------------------------------------
+// Application, arguments, databinding and dataSource for viewModel/Factory-------------------------
 
         val application = requireNotNull(this.activity).application
 
@@ -189,8 +189,6 @@ class EditFragment : Fragment() {
 
             }
         }
-
         return binding.root
-
     }
 }

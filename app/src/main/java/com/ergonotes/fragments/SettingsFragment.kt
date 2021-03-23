@@ -13,6 +13,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
         setPreferencesFromResource(R.xml.settings, rootKey)
 
 // -------------------------------------------------------------------------------------------------
+// only allow numbers in settings title text sizes--------------------------------------------------
 
         val numberNoteTextPreference: EditTextPreference? = findPreference("defaultNoteTextSize")
 
@@ -24,6 +25,7 @@ class SettingsFragment : PreferenceFragmentCompat() {
         }
 
 // -------------------------------------------------------------------------------------------------
+// only allow numbers in settings note text sizes---------------------------------------------------
 
         val numberTitleTextPreference: EditTextPreference? = findPreference("defaultTitleTextSize")
 
