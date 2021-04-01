@@ -132,7 +132,7 @@ class MainFragment : Fragment() {
             }
         }
         binding.recyclerViewNotes.layoutManager = layoutManagerNotes
-
+//
         // For titles
         val layoutManagerTitles = object : GridLayoutManager(
             activity, numberOfRows, HORIZONTAL, false
