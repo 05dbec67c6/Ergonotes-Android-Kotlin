@@ -11,6 +11,9 @@ data class NoteEntry(
     @PrimaryKey(autoGenerate = true)
     var noteId: Long = 0L,
 
+    @ColumnInfo(name = "position")
+    var notePosition: Int = 0,
+
     @ColumnInfo(name = "note_entry_title")
     var noteEntryTitle: String = "dummy_title",
 

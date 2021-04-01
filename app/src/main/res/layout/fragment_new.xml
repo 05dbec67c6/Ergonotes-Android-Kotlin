@@ -54,8 +54,6 @@
             android:inputType="textMultiLine"
             android:labelFor="@string/label_editText_note"
             android:tag="note_content"
-
-
             android:textColor="@{newFragmentViewModel.note.noteEntryTextColor}"
             android:textSize="@{newFragmentViewModel.note.noteEntryNoteTextSize}"
             app:layout_constraintBottom_toTopOf="@id/button_apply_and_go_to_main"

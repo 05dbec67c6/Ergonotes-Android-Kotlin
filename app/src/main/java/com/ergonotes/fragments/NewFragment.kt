@@ -18,6 +18,7 @@ import com.ergonotes.database.NoteDatabase
 import com.ergonotes.databinding.FragmentNewBinding
 import com.ergonotes.viewmodelfactories.NewViewModelFactory
 import com.ergonotes.viewmodels.NewViewModel
+import timber.log.Timber
 
 class NewFragment : Fragment() {
 

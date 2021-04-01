@@ -15,6 +15,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.preference.PreferenceManager
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.ItemTouchHelper
+import androidx.recyclerview.widget.ItemTouchHelper.*
 import androidx.recyclerview.widget.RecyclerView
 import com.ergonotes.R
 import com.ergonotes.adapter.NotesAdapter
@@ -23,10 +24,11 @@ import com.ergonotes.database.NoteDatabase
 import com.ergonotes.databinding.FragmentMainBinding
 import com.ergonotes.viewmodelfactories.MainViewModelFactory
 import com.ergonotes.viewmodels.MainViewModel
+import timber.log.Timber
+import java.util.*
+
 
 class MainFragment : Fragment() {
-
-    var touchHelper: ItemTouchHelper? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -142,31 +144,111 @@ class MainFragment : Fragment() {
         }
         binding.recyclerViewTitles.layoutManager = layoutManagerTitles
 
-// -------------------------------------------------------------------------------------------------
-// Instance of adapter that handles click on listItem and submit recyclerviews list-----------------
-
-        // Setting adapter for notes
         val adapterNotes = NotesAdapter()
         binding.recyclerViewNotes.adapter = adapterNotes
 
-        // Submitting the whole list of notes for the recyclerview
-        mainViewModel.allNotes.observe(viewLifecycleOwner, {
-            it?.let {
-                adapterNotes.submitList(it)
-            }
-        })
 
-        // Setting adapter for titles
         val adapterTitles = TitlesAdapter()
         binding.recyclerViewTitles.adapter = adapterTitles
 
-        // Submitting the whole list of titles for the recyclerview
-        mainViewModel.allNotes.observe(viewLifecycleOwner,
-            {
-                it?.let {
-                    adapterTitles.submitList(it)
-                }
-            })
+        mainViewModel.allNotesByPosition.observe(viewLifecycleOwner, { note ->
+            note?.let {
+
+                adapterNotes.submitList(it)
+                adapterTitles.submitList(it)
+
+            }
+        })
+
+// -------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------
+
+
+        mainViewModel.allNotesByPosition.observe(viewLifecycleOwner, { note ->
+            note?.let {
+
+                val simpleItemTouchCallback =
+                    object : ItemTouchHelper.SimpleCallback(
+                        UP or DOWN or START or END,
+                        0
+                    ) {
+                        private var fromPosition: Int? = null
+                        private var toPosition: Int? = null
+
+                        override fun onSwiped(
+                            viewHolder: RecyclerView.ViewHolder,
+                            direction: Int
+                        ) {
+                        }
+
+                        override fun onSelectedChanged(
+                            viewHolder: RecyclerView.ViewHolder?,
+                            actionState: Int
+                        ) {
+                            super.onSelectedChanged(viewHolder, actionState)
+
+                            if (actionState == ACTION_STATE_DRAG) {
+                                viewHolder?.itemView?.alpha = 0.5f
+                            }
+                        }
+
+                        override fun onMove(
+                            recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder,
+                            target: RecyclerView.ViewHolder
+                        ): Boolean {
+
+                            val from = viewHolder.adapterPosition
+                            val to = target.adapterPosition
+
+                            fromPosition = from
+                            toPosition = to
+
+                            Collections.swap(it, from, to)
+
+                            Timber.i("onMove")
+                            Timber.i("Viewholderpositions: fromPosition: ${fromPosition}  toPosition: $toPosition")
+
+                            Timber.i("NoteEntryPosition: fromPosition: ${it[fromPosition!!].notePosition}")
+                            Timber.i("NoteEntryPosition: toPosition: ${it[toPosition!!].notePosition}")
+
+                            if (fromPosition != null && toPosition != null) {
+                                mainViewModel.updateNotes(
+                                    it[fromPosition!!],
+                                    it[toPosition!!],
+                                    toPosition!!,
+                                    fromPosition!!
+                                )
+                            }
+                            adapterNotes.submitList(it)
+                            adapterTitles.submitList(it)
+                            return true
+                        }
+
+                        override fun clearView(
+                            recyclerView: RecyclerView,
+                            viewHolder: RecyclerView.ViewHolder
+                        ) {
+                            super.clearView(recyclerView, viewHolder)
+                            viewHolder.itemView.alpha = 1.0f
+
+                            fromPosition = null
+                            toPosition = null
+                        }
+                    }
+                ItemTouchHelper(simpleItemTouchCallback as SimpleCallback).attachToRecyclerView(
+                    binding.recyclerViewNotes
+                )
+            }
+
+        })
+
+
+// -------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------
 
 // Navigate to newFragment on item click
         mainViewModel.navigateToNewFragment.observe(viewLifecycleOwner,
@@ -186,18 +268,34 @@ class MainFragment : Fragment() {
             object : RecyclerView.OnScrollListener() {
                 override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                     super.onScrolled(recyclerView, dx, dy)
-                    scrollListeners[1]?.let { binding.recyclerViewNotes.removeOnScrollListener(it) }
+                    scrollListeners[1]?.let {
+                        binding.recyclerViewNotes.removeOnScrollListener(
+                            it
+                        )
+                    }
                     binding.recyclerViewNotes.scrollBy(dx, dy)
-                    scrollListeners[1]?.let { binding.recyclerViewNotes.addOnScrollListener(it) }
+                    scrollListeners[1]?.let {
+                        binding.recyclerViewNotes.addOnScrollListener(
+                            it
+                        )
+                    }
                 }
             }
         scrollListeners[1] =
             object : RecyclerView.OnScrollListener() {
                 override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                     super.onScrolled(recyclerView, dx, dy)
-                    scrollListeners[0]?.let { binding.recyclerViewTitles.removeOnScrollListener(it) }
+                    scrollListeners[0]?.let {
+                        binding.recyclerViewTitles.removeOnScrollListener(
+                            it
+                        )
+                    }
                     binding.recyclerViewTitles.scrollBy(dx, dy)
-                    scrollListeners[0]?.let { binding.recyclerViewTitles.addOnScrollListener(it) }
+                    scrollListeners[0]?.let {
+                        binding.recyclerViewTitles.addOnScrollListener(
+                            it
+                        )
+                    }
                 }
             }
 
@@ -217,7 +315,7 @@ class MainFragment : Fragment() {
                 noteEntryBackgroundColor = defaultBackgroundColor,
                 noteEntryTextColor = defaultTextColor,
                 noteEntryNoteSize = defaultNoteTextSize,
-                noteEntryTitleSize = defaultTitleTextSize
+                noteEntryTitleSize = defaultTitleTextSize,
             )
 
             mainViewModel.navigateToNewNote.observe(viewLifecycleOwner, { note ->
@@ -237,9 +335,6 @@ class MainFragment : Fragment() {
                 MainFragmentDirections.actionMainFragmentToSettingsFragment()
             )
         }
-// -------------------------------------------------------------------------------------------------
-
-
 // -------------------------------------------------------------------------------------------------
         return binding.root
     }
