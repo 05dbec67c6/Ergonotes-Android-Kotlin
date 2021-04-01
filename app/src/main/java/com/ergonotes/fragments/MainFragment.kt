@@ -156,7 +156,6 @@ class MainFragment : Fragment() {
 
                 adapterNotes.submitList(it)
                 adapterTitles.submitList(it)
-
             }
         })
 
