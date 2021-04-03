@@ -132,7 +132,7 @@ class MainFragment : Fragment() {
             }
         }
         binding.recyclerViewNotes.layoutManager = layoutManagerNotes
-// new
+
         // For titles
         val layoutManagerTitles = object : GridLayoutManager(
             activity, numberOfRows, HORIZONTAL, false
@@ -163,25 +163,32 @@ class MainFragment : Fragment() {
 // -------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------
+// Here is my failed attempt to implement the ItemTouchHelper. It first get the position and
+// then in the viewmodel should update the database entries, but it doesnt work. I think it
+// it has to do with the combination of a ListAdapter and LiveData, but I dont know
 
-
+        // Observing the livedata that is manipulated via viewmodel
         mainViewModel.allNotesByPosition.observe(viewLifecycleOwner, { note ->
             note?.let {
 
+                // Implementing a Callback
                 val simpleItemTouchCallback =
                     object : ItemTouchHelper.SimpleCallback(
                         UP or DOWN or START or END,
                         0
                     ) {
+                        // Setting any Positions to null, so we are safe from old values
                         private var fromPosition: Int? = null
                         private var toPosition: Int? = null
 
+                        //nothing to do in swiped
                         override fun onSwiped(
                             viewHolder: RecyclerView.ViewHolder,
                             direction: Int
                         ) {
                         }
 
+                        // here only make it look through a little
                         override fun onSelectedChanged(
                             viewHolder: RecyclerView.ViewHolder?,
                             actionState: Int
@@ -193,25 +200,30 @@ class MainFragment : Fragment() {
                             }
                         }
 
+                        // this is were the magic happens
                         override fun onMove(
                             recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder,
                             target: RecyclerView.ViewHolder
                         ): Boolean {
 
+                            // I get the two positions
                             val from = viewHolder.adapterPosition
                             val to = target.adapterPosition
 
+                            // set the initial values to the touched
                             fromPosition = from
                             toPosition = to
 
+                            // swap the two entries of the database
                             Collections.swap(it, from, to)
 
+                            // some Timbercommands helping me to get behind the system
                             Timber.i("onMove")
                             Timber.i("Viewholderpositions: fromPosition: ${fromPosition}  toPosition: $toPosition")
-
                             Timber.i("NoteEntryPosition: fromPosition: ${it[fromPosition!!].notePosition}")
                             Timber.i("NoteEntryPosition: toPosition: ${it[toPosition!!].notePosition}")
 
+                            // if both is null, then change the values in the database by using the viewmodel
                             if (fromPosition != null && toPosition != null) {
                                 mainViewModel.updateNotes(
                                     it[fromPosition!!],
@@ -220,8 +232,12 @@ class MainFragment : Fragment() {
                                     fromPosition!!
                                 )
                             }
+
+                            // submit the list again, because I somewhere read, that the update
+                            // method doesnt trigger the livedata to notice a change
                             adapterNotes.submitList(it)
                             adapterTitles.submitList(it)
+
                             return true
                         }
 
@@ -243,7 +259,7 @@ class MainFragment : Fragment() {
 
         })
 
-
+// End of Itemtouchhelper
 // -------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------
@@ -304,10 +320,10 @@ class MainFragment : Fragment() {
 // -------------------------------------------------------------------------------------------------
 // Buttons------------------------------------------------------------------------------------------
 
-// Button - exit app
+        // Button - exit app
         binding.buttonExit.setOnClickListener { activity?.finish() }
 
-// Button - new note with default values
+        // Button - new note with default values
         binding.buttonAdd.setOnClickListener {
 
             mainViewModel.onAddNote(
@@ -334,7 +350,11 @@ class MainFragment : Fragment() {
                 MainFragmentDirections.actionMainFragmentToSettingsFragment()
             )
         }
+
 // -------------------------------------------------------------------------------------------------
+
         return binding.root
     }
+
+
 }

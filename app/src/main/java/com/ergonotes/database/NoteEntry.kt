@@ -11,6 +11,7 @@ data class NoteEntry(
     @PrimaryKey(autoGenerate = true)
     var noteId: Long = 0L,
 
+    // the position entity I want to have the list of livedata being ordered
     @ColumnInfo(name = "position")
     var notePosition: Int = 0,
 
